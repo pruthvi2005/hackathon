@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+  <link as="style"
+    href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Spline+Sans%3Awght%40400%3B500%3B700"
+    onload="this.rel='stylesheet'" rel="stylesheet" />
+  <link as="style"
+    href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans:wght@400;500;700;900&family=Spline+Sans:wght@400;500;700"
+    onload="this.rel='stylesheet'" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <title>Leaderboard</title>
+  <link rel="shortcut icon" href="../../Images/gamification (2).png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script type="module" src="../../jsFiles/logout.js"></script>
+  <style type="text/tailwindcss">
+    /* :root {
+        --primary-color: #20DF6C;
+      }
+      .bg-primary {
+        background-color: var(--primary-color);
+      }
+      .text-primary {
+        color: var(--primary-color);
+      }
+      .border-primary {
+        border-color: var(--primary-color);
+      }
+      .tab-content {
+      display: none;
+    } */
+
+    :root {
+        --primary-50: #f0fdf6;
+        --primary-100: #dcfce9;
+        --primary-200: #bbf7d4;
+        --primary-300: #86efb5;
+        --primary-400: #4ade8f;
+        --primary-500: #20df6c;
+        --primary-600: #16a34a;
+        --primary-700: #15803d;
+        --primary-800: #166534;
+        --primary-900: #14532d;
+        --primary-950: #052e16;
+      }
+
+    /* Show content when radio is checked */
+    #tab-discussions:checked ~ .mt-6 #content-discussions,
+    #tab-news:checked ~ .mt-6 #content-news,
+    #tab-projects:checked ~ .mt-6 #content-projects {
+      display: block;
+    }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+  <div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden"
+    style='font-family: "Spline Sans", "Noto Sans", sans-serif;'>
+    <div class="layout-container flex h-full grow flex-col">
+      <header
+        class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 px-10 py-3">
+        </a>
+        <div class="flex items-center gap-4 text-gray-900">
+          <div class="text-green-500">
+            <img class="w-10" src="gamification.png" alt="">
+          </div>
+          <div class="flex items-center gap-4 text-[#111811]">
+            <div class="size-8">
+              <img src="../../Images/gamification (2).png" alt="Gamification Icon"
+                class="w-full h-full object-contain" />
+            </div>
+           <a href="../Student/studash.html"> <h2 class="text-[#111811] text-lg font-bold leading-tight tracking-[-0.015em]">Playora</h2></a>
+          </div>
+        </div>
+        <div class="flex items-center gap-8 text-gray-700 font-medium">
+          <a class="hover:text-gray-900 transition-colors" href="../Student/studash.html">Dashboard</a>
+          <a class="hover:text-gray-900 transition-colors" href="../Student/play.html">Play</a>
+          <a class="hover:text-gray-900 transition-colors" href="../Student/compete.html">Compete</a>
+          <a class="text-gray-900 font-semibold " href="../Student/leaderboard.html">Leaderboard</a>
+        </div>
+
+        <div class="flex items-center space-x-4 relative">
+          <a href="htmlFiles/../../Common/notifications.html" class="material-icons text-gray-600">notifications</a>
+          <div class="relative">
+            <!-- hidden checkbox acts as toggle -->
+            <input type="checkbox" id="dropdownToggle" class="hidden peer">
+
+            <!-- button (label for checkbox) -->
+            <label for="dropdownToggle" class="flex items-center gap-2 cursor-pointer">
+              <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
+                <span class="material-icons text-gray-500">person</span>
+              </div>
+
+            </label>
+
+            <!-- dropdown menu -->
+            <div class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl z-10 p-2 hidden peer-checked:block">
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="../Common/avatars.html">
+                <span class="material-symbols-outlined text-base">face</span>
+                Profile
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="./MyCourses/learn.html">
+                <span class="material-symbols-outlined text-base">school</span>
+                My Courses
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="MyAchievements.html">
+                <span class="material-symbols-outlined text-base">emoji_events</span>
+                My Achievements
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="htmFiles/../../Common/helpSupport.html">
+                <span class="material-symbols-outlined text-base">help</span>
+                Help & Support
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="settings.html">
+                <span class="material-symbols-outlined text-base">settings</span>
+                Settings
+              </a>
+              <div class="my-1 border-t border-gray-100"></div>
+              <a id="logoutButton" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md" href="">
+                <span class="material-symbols-outlined text-base">logout</span>
+                Sign Out
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="flex-1 px-40 py-10">
+        <div class="layout-content-container mx-auto flex max-w-4xl flex-col">
+          <div class="text-center mb-12">
+            <h1 class="text-5xl font-black tracking-tighter text-gray-900">Leaderboard</h1>
+            <p class="text-lg text-gray-600 mt-2">See how you and your school rank in the eco-challenge</p>
+          </div>
+
+          <div class="mb-8">
+            <!-- School Filter -->
+            <div class="flex justify-center items-center gap-3 mb-4">
+              <label for="school-filter" class="text-gray-700 font-medium">Filter by School:</label>
+              <select id="school-filter" class="border rounded-lg px-3 py-2 text-gray-800">
+                <option value="__all__" selected>All Schools</option>
+              </select>
+            </div>
+            <!-- Tabs row -->
+            <div class="flex justify-center border-b border-gray-200 flex-wrap">
+              <!-- Radios + Labels -->
+              <input type="radio" name="tab" id="tab-school" class="peer/tab-school hidden" checked>
+              <label for="tab-school"
+                class="px-6 py-3 text-lg font-semibold cursor-pointer peer-checked/tab-school:text-gray-900 peer-checked/tab-school:border-b-4 peer-checked/tab-school:border-[var(--primary-color)] text-gray-500 hover:text-gray-900 transition-all">
+                School
+              </label>
+
+              <input type="radio" name="tab" id="tab-student" class="peer/tab-student hidden">
+              <label for="tab-student"
+                class="px-6 py-3 text-lg font-semibold cursor-pointer peer-checked/tab-student:text-gray-900 peer-checked/tab-student:border-b-4 peer-checked/tab-student:border-[var(--primary-color)] text-gray-500 hover:text-gray-900 transition-all">
+                Students
+              </label>
+
+              <!-- SCHOOL TABLE -->
+              <div class="peer-checked/tab-school:block hidden w-full basis-full mt-6">
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                  <div class="p-6 @container">
+                    <table class="w-full">
+                      <thead>
+                        <tr class="border-b border-gray-200">
+                          <th class="px-6 py-4 text-left text-sm font-bold uppercase tracking-wider text-gray-500">Rank
+                          </th>
+                          <th class="px-6 py-4 text-left text-sm font-bold uppercase tracking-wider text-gray-500">
+                            School</th>
+                          <th class="px-6 py-4 text-right text-sm font-bold uppercase tracking-wider text-gray-500">
+                            Eco-Points</th>
+                        </tr>
+                      </thead>
+                      <tbody id="school-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- STUDENTS TABLE -->
+              <div class="peer-checked/tab-student:block hidden w-full basis-full mt-6">
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+                  <div class="p-6 @container">
+                    <table class="w-full">
+                      <thead>
+                        <tr class="border-b border-gray-200">
+                          <th class="px-6 py-4 text-left text-sm font-bold uppercase tracking-wider text-gray-500">Rank
+                          </th>
+                          <th class="px-6 py-4 text-left text-sm font-bold uppercase tracking-wider text-gray-500">
+                            Student</th>
+                          <th class="px-6 py-4 text-right text-sm font-bold uppercase tracking-wider text-gray-500">
+                            Eco-Points</th>
+                        </tr>
+                      </thead>
+                      <tbody id="student-tbody"></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+            </div><!-- /tabs row -->
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyB8ouWfnnQ3YkpvRl65BZzjdwITHLLhhtc",
+    authDomain: "ecolearn-7152f.firebaseapp.com",
+    projectId: "ecolearn-7152f",
+    storageBucket: "ecolearn-7152f.firebasestorage.app",
+    messagingSenderId: "656526494781",
+    appId: "1:656526494781:web:e49084105be0db03102e54",
+    measurementId: "G-7FD6V3M1EL"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const schoolSelect = document.getElementById('school-filter');
+  const schoolTbody = document.getElementById('school-tbody');
+  const studentTbody = document.getElementById('student-tbody');
+
+  function formatNumber(n){
+    try { return Number(n||0).toLocaleString('en-US'); } catch { return n||0; }
+  }
+
+  function renderStudentRows(users, filterSchool){
+    const filtered = users.filter(u => {
+      if (!filterSchool || filterSchool === '__all__') return true;
+      return (u.schoolName||'').trim().toLowerCase() === filterSchool.trim().toLowerCase();
+    });
+    const sorted = filtered.sort((a,b)=> (b.ecoPoints||0) - (a.ecoPoints||0));
+    const rows = sorted.map((u, idx)=>`
+      <tr class="group border-b border-gray-100 hover:bg-gray-50 transition-colors">
+        <td class="px-6 py-5 text-lg font-bold text-gray-800">${idx+1}</td>
+        <td class="px-6 py-5 text-lg font-medium text-gray-800">${u.username || u.Name || u.email || 'Unknown'}</td>
+        <td class="px-6 py-5 text-right text-lg font-bold text-emerald-500">${formatNumber(u.ecoPoints||0)}</td>
+      </tr>`);
+    studentTbody.innerHTML = rows.join('') || '<tr><td colspan="3" class="px-6 py-6 text-center text-gray-500">No students found</td></tr>';
+  }
+
+  function renderSchoolRows(users, filterSchool){
+    const schoolMap = new Map();
+    users.forEach(u=>{
+      const school = (u.schoolName||'Unknown').trim() || 'Unknown';
+      if (filterSchool && filterSchool !== '__all__' && school.toLowerCase() !== filterSchool.trim().toLowerCase()) return;
+      const pts = (u.ecoPoints||0);
+      schoolMap.set(school, (schoolMap.get(school)||0) + pts);
+    });
+    const entries = Array.from(schoolMap.entries()).sort((a,b)=> b[1]-a[1]);
+    const rows = entries.map(([school, pts], idx)=>`
+      <tr class="group border-b border-gray-100 hover:bg-gray-50 transition-colors">
+        <td class="px-6 py-5 text-lg font-bold text-gray-800">${idx+1}</td>
+        <td class="px-6 py-5 text-lg font-medium text-gray-800">${school}</td>
+        <td class="px-6 py-5 text-right text-lg font-bold text-emerald-500">${formatNumber(pts)}</td>
+      </tr>`);
+    schoolTbody.innerHTML = rows.join('') || '<tr><td colspan="3" class="px-6 py-6 text-center text-gray-500">No schools found</td></tr>';
+  }
+
+  function populateSchoolFilter(users){
+    const set = new Set();
+    users.forEach(u=>{ const s=(u.schoolName||'').trim(); if (s) set.add(s); });
+    const options = ['<option value="__all__">All Schools</option>']
+      .concat(Array.from(set).sort().map(s=>`<option value="${s}">${s}</option>`));
+    schoolSelect.innerHTML = options.join('');
+  }
+
+  async function loadLeaderboard(){
+    try{
+      const snap = await getDocs(collection(db, 'users'));
+      const users = snap.docs.map(d=>({ id: d.id, ...d.data() }));
+      users.forEach(u=>{ if (typeof u.ecoPoints !== 'number') u.ecoPoints = 0; });
+
+      populateSchoolFilter(users);
+      const currentFilter = schoolSelect.value || '__all__';
+      renderStudentRows(users, currentFilter);
+      renderSchoolRows(users, currentFilter);
+
+      schoolSelect.addEventListener('change', ()=>{
+        const f = schoolSelect.value || '__all__';
+        renderStudentRows(users, f);
+        renderSchoolRows(users, f);
+      });
+    }catch(err){
+      console.error('Failed to load leaderboard', err);
+      schoolTbody.innerHTML = '<tr><td colspan="3" class="px-6 py-6 text-center text-red-600">Error loading schools</td></tr>';
+      studentTbody.innerHTML = '<tr><td colspan="3" class="px-6 py-6 text-center text-red-600">Error loading students</td></tr>';
+    }
+  }
+
+  loadLeaderboard();
+</script>
+</body>
+
+</html>

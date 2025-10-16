@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Waste-Wise Challenge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --recycling-color: #3498db;
+            --organic-color: #2ecc71;
+            --ewaste-color: #f1c40f;
+            --landfill-color: #95a5a6;
+            --bg-color: #ecf0f1;
+            --font-color: #34495e;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--font-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+        }
+
+        #game-container {
+            width: 95%;
+            max-width: 1000px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        h1 {
+            color: var(--font-color);
+            margin-bottom: 20px;
+        }
+
+        #info-panel {
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        #score { color: var(--recycling-color); }
+        #progress-text { color: var(--organic-color); }
+
+        #item-spawner {
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        /* --- UPDATED DRAGGABLE ITEM STYLES START HERE --- */
+        #draggable-item {
+            width: 160px;
+            height: 180px;
+            background-color: var(--card-bg);
+            /* border: 2px solid #ddd; Removed this line to eliminate the white border */
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08); /* Softer shadow */
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            -webkit-clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
+        #draggable-item.dragging {
+            opacity: 0.6;
+            cursor: grabbing;
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15); /* Adjusted shadow when dragging */
+        }
+        /* --- UPDATED DRAGGABLE ITEM STYLES END HERE --- */
+
+        #item-image {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            pointer-events: none;
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 2px;
+        }
+        
+        #item-name {
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        #bins-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .bin {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            margin: 0 auto;
+        }
+
+        .bin.drag-over {
+            transform: scale(1.05);
+        }
+        .bin h2 { margin-top: 5px; font-size: 1.1em; font-weight: 600; }
+        .bin .icon { font-size: 2.8em; }
+
+        #recycling-bin { border-color: var(--recycling-color); color: var(--recycling-color); background-color: rgba(52, 152, 219, 0.1); }
+        #organic-bin { border-color: var(--organic-color); color: var(--organic-color); background-color: rgba(46, 204, 113, 0.1); }
+        #ewaste-bin { border-color: var(--ewaste-color); color: var(--ewaste-color); background-color: rgba(241, 196, 15, 0.1); }
+        #landfill-bin { border-color: var(--landfill-color); color: var(--landfill-color); background-color: rgba(149, 165, 166, 0.15); }
+
+        #recycling-bin.drag-over { background-color: rgba(52, 152, 219, 0.2); }
+        #organic-bin.drag-over { background-color: rgba(46, 204, 113, 0.2); }
+        #ewaste-bin.drag-over { background-color: rgba(241, 196, 15, 0.2); }
+        #landfill-bin.drag-over { background-color: rgba(149, 165, 166, 0.25); }
+        
+        @keyframes correct-flash { from { background-color: #2ecc7133; } to { background-color: transparent; } }
+        .correct-flash { animation: correct-flash 0.5s ease-out; }
+        
+        @keyframes incorrect-flash { from { background-color: #e74c3c33; } to { background-color: transparent; } }
+        .incorrect-flash { animation: incorrect-flash 0.5s ease-out; }
+
+        #game-over-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none; justify-content: center; align-items: center; z-index: 1000;
+        }
+        #modal-content {
+            background: white; padding: 40px; border-radius: 15px; text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        #restart-btn {
+            background-color: var(--organic-color); color: white; border: none; padding: 15px 30px;
+            font-size: 1.2em; border-radius: 8px; cursor: pointer; margin-top: 20px;
+            transition: background-color 0.3s; font-weight: 600;
+        }
+        #restart-btn:hover { background-color: #27ae60; }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <h1>♻️ Waste-Wise Challenge 🗑️</h1>
+        <div id="info-panel">
+            <span>Score: <span id="score">0</span></span>
+            <span id="progress-text">Item 1 / 9</span>
+        </div>
+
+        <div id="item-spawner">
+            <div id="draggable-item" draggable="true">
+                <img id="item-image" src="" alt="Item to sort">
+                <p id="item-name"></p>
+            </div>
+        </div>
+
+        <div id="bins-container">
+            <div class="bin" id="recycling-bin" data-type="recycling">
+                <div class="icon">♻️</div>
+                <h2>Recycling</h2>
+            </div>
+            <div class="bin" id="organic-bin" data-type="organic">
+                <div class="icon">🌿</div>
+                <h2>Organic</h2>
+            </div>
+            <div class="bin" id="ewaste-bin" data-type="e-waste">
+                <div class="icon">🔋</div>
+                <h2>E-Waste</h2>
+            </div>
+            <div class="bin" id="landfill-bin" data-type="landfill">
+                <div class="icon">🗑️</div>
+                <h2>Landfill</h2>
+    </div>
+
+    <div id="game-over-modal">
+        <div id="modal-content">
+            <h2>Challenge Complete!</h2>
+            <p id="final-score-text"></p>
+            <p id="final-message"></p>
+            <button id="claim-points-btn" class="play-again-btn" style="background-color: #3498db; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer;">Claim Points</button>
+            <button id="restart-btn">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        const gameItems = [
+            { name: 'Soda Can', image: './image/soda%20%20can.jpg', type: 'recycling' },
+            { name: 'Apple Core', image: './image/apple%20core.jpg', type: 'organic' },
+            { name: 'Old Phone', image: './image/old%20phone.jpg', type: 'e-waste' },
+            { name: 'Chip Bag', image: './image/chip%20bag.jpg', type: 'landfill' },
+            { name: 'Newspaper', image: './image/newpaper.jpg', type: 'recycling' },
+            { name: 'Battery', image: './image/battery.jpg', type: 'e-waste' },
+            { name: 'Banana Peel', image: './image/banana%20peel.jpg', type: 'organic' },
+            { name: 'Styrofoam Cup', image: './image/styrofoam%20cup.jpg', type: 'landfill' },
+            { name: 'Glass Bottle', image: './image/glass%20bottle.jpg', type: 'recycling' }
+        ];
+
+        let score = 0;
+        let currentItemIndex = 0;
+        let shuffledItems = [];
+
+        const draggableItem = document.getElementById('draggable-item');
+        const itemName = document.getElementById('item-name');
+        const itemImage = document.getElementById('item-image');
+        const scoreDisplay = document.getElementById('score');
+        const progressText = document.getElementById('progress-text');
+        const bins = document.querySelectorAll('.bin');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const finalScoreText = document.getElementById('final-score-text');
+        const finalMessage = document.getElementById('final-message');
+        const restartBtn = document.getElementById('restart-btn');
+
+        function startGame() {
+            score = 0;
+            currentItemIndex = 0;
+            shuffledItems = [...gameItems].sort(() => Math.random() - 0.5);
+            updateScoreAndProgress();
+            loadNextItem();
+            gameOverModal.style.display = 'none';
+            draggableItem.style.display = 'flex';
+        }
+
+        function loadNextItem() {
+            if (currentItemIndex >= shuffledItems.length) {
+                endGame();
+                return;
+            }
+            const item = shuffledItems[currentItemIndex];
+            itemName.textContent = item.name;
+            itemImage.src = item.image;
+        }
+
+        function updateScoreAndProgress() {
+            scoreDisplay.textContent = score;
+            progressText.textContent = `Item ${currentItemIndex + 1} / ${shuffledItems.length}`;
+        }
+        
+        function handleDrop(e) {
+            const bin = e.currentTarget;
+            bin.classList.remove('drag-over');
+
+            const droppedItemType = shuffledItems[currentItemIndex].type;
+            const binType = bin.dataset.type;
+
+            if (droppedItemType === binType) {
+                score += 10;
+                bin.classList.add('correct-flash');
+            } else {
+                score -= 5;
+                bin.classList.add('incorrect-flash');
+            }
+
+            setTimeout(() => bin.classList.remove('correct-flash', 'incorrect-flash'), 500);
+            
+            currentItemIndex++;
+            updateScoreAndProgress();
+            setTimeout(loadNextItem, 300);
+        }
+
+        function endGame() {
+            draggableItem.style.display = 'none';
+            finalScoreText.textContent = `Your final score is: ${score}`;
+            const maxScore = shuffledItems.length * 10;
+
+            if (score === maxScore) {
+                finalMessage.textContent = "Perfect score! You're a Waste-Wise Wizard! 🧙‍♂️";
+            } else if (score >= maxScore * 0.7) {
+                finalMessage.textContent = "Excellent work! You're making a real difference. ✨";
+            } else {
+                finalMessage.textContent = "Good effort! Every correct choice helps our planet. 🌱";
+            }
+            
+            // expose final score for claim script
+            window.__finalScore = score;
+            gameOverModal.style.display = 'flex';
+        }
+
+        draggableItem.addEventListener('dragstart', () => {
+            setTimeout(() => draggableItem.classList.add('dragging'), 0);
+        });
+        draggableItem.addEventListener('dragend', () => draggableItem.classList.remove('dragging'));
+
+        bins.forEach(bin => {
+            bin.addEventListener('dragover', e => {
+                e.preventDefault();
+                bin.classList.add('drag-over');
+            });
+            bin.addEventListener('dragleave', () => bin.classList.remove('drag-over'));
+            bin.addEventListener('drop', handleDrop);
+        });
+        
+        restartBtn.addEventListener('click', startGame);
+        document.addEventListener('DOMContentLoaded', startGame);
+    </script>
+    <script type="module">
+      import { awardPoints } from "../jsFiles/points.js";
+      const claimBtn = document.getElementById('claim-points-btn');
+      claimBtn?.addEventListener('click', async () => {
+        const points = Math.max(0, Number(window.__finalScore || 0));
+        await awardPoints(points);
+        claimBtn.disabled = true;
+        claimBtn.textContent = 'Points Claimed';
+      });
+    </script>
+</body>
+</html>

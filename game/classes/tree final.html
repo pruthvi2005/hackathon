@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Tree Plantation Lesson</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --correct-color: #2ecc71;
+            --incorrect-color: #e74c3c;
+            --neutral-color: #3498db;
+            --bg-color: #ecf0f1;
+            --font-color: #34495e;
+            --card-bg: #ffffff;
+            --progress-active: #3498db;
+            --progress-completed: #2ecc71;
+            --progress-inactive: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--font-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .lesson-container {
+            width: 95%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        /* --- Progress Bar Styles --- */
+        #progress-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        #progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 10%;
+            right: 10%;
+            height: 4px;
+            background-color: var(--progress-inactive);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-weight: 600;
+            color: var(--progress-inactive);
+            z-index: 2;
+            background-color: var(--card-bg);
+            padding: 0 10px;
+        }
+        .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid var(--progress-inactive);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+            transition: all 0.4s ease;
+        }
+        .progress-step.active .step-icon {
+            border-color: var(--progress-active);
+            background-color: var(--progress-active);
+            color: white;
+        }
+        .progress-step.active {
+            color: var(--progress-active);
+        }
+        .progress-step.completed .step-icon {
+            border-color: var(--progress-completed);
+            background-color: var(--progress-completed);
+            color: white;
+        }
+         .progress-step.completed {
+            color: var(--progress-completed);
+        }
+
+        /* --- Video Step Styles --- */
+        #video-container {
+            width: 100%;
+            margin: 20px 0;
+        }
+        .responsive-iframe {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border-radius: 10px;
+        }
+
+        /* --- Quiz Styles (Reused) --- */
+        #quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        #question {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            min-height: 80px;
+        }
+        .answer-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background-color: white; border: 2px solid var(--neutral-color); color: var(--neutral-color);
+            padding: 15px; font-size: 1.1em; font-weight: 600; border-radius: 10px; cursor: pointer;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s; text-align: center;
+        }
+        .btn:hover:not(:disabled) { background-color: var(--neutral-color); color: white; transform: scale(1.03); }
+        .btn.correct { background-color: var(--correct-color); border-color: var(--correct-color); color: white; }
+        .btn.incorrect { background-color: var(--incorrect-color); border-color: var(--incorrect-color); color: white; }
+        .btn:disabled { cursor: not-allowed; }
+        
+        /* --- Controls & Results --- */
+        .controls { display: flex; justify-content: center; }
+        .nav-btn, .play-again-btn {
+            background-color: var(--neutral-color); color: white; border: none; padding: 15px 40px;
+            font-size: 1.2em; border-radius: 10px; cursor: pointer; transition: background-color 0.3s;
+            font-weight: 600; margin-top: 20px;
+        }
+        .nav-btn:hover, .play-again-btn:hover { background-color: #2980b9; }
+        #results-step h2 { font-size: 2em; }
+        #final-score { font-size: 1.5em; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="lesson-container">
+        <h1>Tree Plantation Lesson</h1>
+
+        <!-- Progress Bar -->
+        <div id="progress-bar">
+            <div class="progress-step active" id="step-1">
+                <div class="step-icon">▶️</div>
+                <span>Video</span>
+            </div>
+            <div class="progress-step" id="step-2">
+                <div class="step-icon">❓</div>
+                <span>Quiz</span>
+            </div>
+            <div class="progress-step" id="step-3">
+                <div class="step-icon">🏆</div>
+                <span>Results</span>
+            </div>
+        </div>
+
+        <!-- Step 1: Video -->
+        <div id="video-step">
+            <h2>Step 1: Watch the Video</h2>
+            <p>Learn the basics of tree plantation from this short video.</p>
+            <div id="video-container">
+                <iframe class="responsive-iframe" src="https://www.youtube.com/embed/LeiZGYUwOYQ?si=mIo4sSbwGj1og0Lg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            </div>
+            <button class="nav-btn" id="start-quiz-btn">Start Quiz</button>
+        </div>
+
+        <!-- Step 2: Quiz -->
+        <div id="quiz-step" class="hide">
+             <div id="quiz-header">
+                <div id="progress-text">Question 1 of 5</div>
+                <div id="score-text">Score: 0</div>
+            </div>
+            <h2 id="question">Question Text</h2>
+            <div id="answer-buttons" class="answer-buttons"></div>
+            <div class="controls">
+                <button id="next-question-btn" class="nav-btn hide">Next</button>
+            </div>
+        </div>
+
+        <!-- Step 3: Results -->
+        <div id="results-step" class="hide">
+            <h2>Lesson Complete!</h2>
+            <p id="final-score">You got 0 out of 5 correct!</p>
+            <button id="play-again-btn" class="play-again-btn">Start Over</button>
+        </div>
+    </div>
+
+    <script>
+        // --- YOUR TREE PLANTATION QUESTIONS ---
+        const questions = [
+            {
+                question: "You want to plant trees in your community. What do you do?",
+                answers: [
+                    { text: "Plant native trees in public areas with permission", correct: true },
+                    { text: "Plant exotic trees that may become invasive", correct: false },
+                    { text: "Ignore tree planting opportunities", correct: false },
+                    { text: "Plant trees only in your garden", correct: false }
+                ]
+            },
+            {
+                question: "You are watering the newly planted trees. How do you do it?",
+                answers: [
+                    { text: "Water them early in the morning or evening", correct: true },
+                    { text: "Water during the hottest part of the day", correct: false },
+                    { text: "Use excess water without care", correct: false },
+                    { text: "Rely solely on rain", correct: false }
+                ]
+            },
+            {
+                question: "You notice a tree in your area is dying. What action do you take?",
+                answers: [
+                    { text: "Report it to local authorities or a tree-planting group", correct: true },
+                    { text: "Cut it down immediately", correct: false },
+                    { text: "Ignore it", correct: false },
+                    { text: "Try to revive it with proper care", correct: false }
+                ]
+            },
+            {
+                question: "You are choosing trees to plant. Which is the best choice?",
+                answers: [
+                    { text: "Native species that support local wildlife", correct: true },
+                    { text: "Fast-growing non-native species", correct: false },
+                    { text: "Trees with high water demand in dry areas", correct: false },
+                    { text: "Small shrubs instead of trees", correct: false }
+                ]
+            },
+            {
+                question: "You want to engage your community in tree planting. What do you do?",
+                answers: [
+                    { text: "Organize community planting events", correct: true },
+                    { text: "Plant trees alone without informing others", correct: false },
+                    { text: "Share posts online without planting", correct: false },
+                    { text: "Avoid participation", correct: false }
+                ]
+            }
+        ];
+
+        // DOM Elements
+        const stepElements = [document.getElementById('video-step'), document.getElementById('quiz-step'), document.getElementById('results-step')];
+        const progressSteps = [document.getElementById('step-1'), document.getElementById('step-2'), document.getElementById('step-3')];
+        
+        const startQuizBtn = document.getElementById('start-quiz-btn');
+        const nextQuestionBtn = document.getElementById('next-question-btn');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        
+        const questionElement = document.getElementById('question');
+        const answerButtonsElement = document.getElementById('answer-buttons');
+        const progressText = document.getElementById('progress-text');
+        const scoreText = document.getElementById('score-text');
+        const finalScoreElement = document.getElementById('final-score');
+
+        // State Variables
+        let shuffledQuestions, currentQuestionIndex, score, currentStep;
+
+        function showStep(stepNumber) {
+            currentStep = stepNumber;
+            stepElements.forEach((el, index) => {
+                el.classList.toggle('hide', (index + 1) !== stepNumber);
+            });
+            updateProgressBar();
+        }
+        
+        function updateProgressBar() {
+            progressSteps.forEach((step, index) => {
+                step.classList.remove('active', 'completed');
+                if ((index + 1) < currentStep) {
+                    step.classList.add('completed');
+                } else if ((index + 1) === currentStep) {
+                    step.classList.add('active');
+                }
+            });
+        }
+
+        function startQuiz() {
+            showStep(2);
+            shuffledQuestions = questions.sort(() => Math.random() - 0.5);
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreText.innerText = `Score: ${score}`;
+            showQuestion(shuffledQuestions[currentQuestionIndex]);
+        }
+
+        function showQuestion(question) {
+            resetQuizState();
+            questionElement.innerText = question.question;
+            progressText.innerText = `Question ${currentQuestionIndex + 1} of ${shuffledQuestions.length}`;
+            
+            question.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.innerText = answer.text;
+                button.classList.add('btn');
+                if (answer.correct) {
+                    button.dataset.correct = answer.correct;
+                }
+                button.addEventListener('click', selectAnswer);
+                answerButtonsElement.appendChild(button);
+            });
+        }
+
+        function resetQuizState() {
+            nextQuestionBtn.classList.add('hide');
+            while (answerButtonsElement.firstChild) {
+                answerButtonsElement.removeChild(answerButtonsElement.firstChild);
+            }
+        }
+
+        function selectAnswer(e) {
+            const selectedButton = e.target;
+            const correct = selectedButton.dataset.correct === 'true';
+
+            if (correct) {
+                score++;
+                scoreText.innerText = `Score: ${score}`;
+            }
+            setStatusClass(selectedButton, correct);
+            Array.from(answerButtonsElement.children).forEach(button => {
+                setStatusClass(button, button.dataset.correct === 'true');
+                button.disabled = true;
+            });
+            nextQuestionBtn.classList.remove('hide');
+        }
+        
+        function setStatusClass(element, correct) {
+            element.classList.remove('correct', 'incorrect');
+            if (correct) {
+                element.classList.add('correct');
+            } else {
+                element.classList.add('incorrect');
+            }
+        }
+
+        function handleNextButton() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < shuffledQuestions.length) {
+                showQuestion(shuffledQuestions[currentQuestionIndex]);
+            } else {
+                showResults();
+            }
+        }
+        
+        function showResults() {
+            showStep(3);
+            finalScoreElement.innerText = `You scored ${score} out of ${shuffledQuestions.length}!`;
+        }
+        
+        function startOver() {
+            showStep(1);
+        }
+
+        // Event Listeners
+        startQuizBtn.addEventListener('click', startQuiz);
+        nextQuestionBtn.addEventListener('click', handleNextButton);
+        playAgainBtn.addEventListener('click', startOver);
+        
+        // Initial state
+        startOver();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Sort Game</title>
+    <style>
+        /* --- General Styling --- */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f7f4;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* --- Game Container --- */
+        #game-container {
+            width: 90%;
+            max-width: 800px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c5b4c;
+        }
+
+        /* --- Info Panel (Score) --- */
+        #info-panel {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+
+        #score {
+            font-weight: bold;
+            color: #1a7e5f;
+        }
+
+        /* --- Main Game Area --- */
+        #main-area {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        /* --- Drop Zones (The Bins) --- */
+        .drop-zone {
+            flex: 1;
+            padding: 20px;
+            border: 3px dashed #ccc;
+            border-radius: 10px;
+            min-height: 300px;
+            transition: background-color 0.3s, border-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #good-zone { border-color: #4CAF50; }
+        #bad-zone { border-color: #f44336; }
+
+        .drop-zone h2 { margin-top: 0; }
+        #good-zone h2 { color: #4CAF50; }
+        #bad-zone h2 { color: #f44336; }
+
+        /* Visual feedback when dragging over a zone */
+        .drop-zone.drag-over {
+            background-color: #e8f5e9;
+        }
+        #bad-zone.drag-over {
+            background-color: #ffebee;
+        }
+
+        /* --- Draggable Item --- */
+        #item-area {
+            flex-basis: 200px; /* How wide the center area is */
+        }
+        
+        #draggable-item {
+            width: 160px;
+            height: 200px;
+            background-color: #fff;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        /* Style while being dragged */
+        #draggable-item.dragging {
+            opacity: 0.5;
+            cursor: grabbing;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            transform: scale(1.05);
+        }
+
+        #draggable-item img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        #item-name {
+            font-weight: bold;
+            font-size: 1em;
+        }
+        
+        /* --- Feedback Animations --- */
+        @keyframes correct-flash {
+            from { background-color: #a5d6a7; }
+            to { background-color: transparent; }
+        }
+        .correct-flash { animation: correct-flash 0.5s ease-out; }
+        
+        @keyframes incorrect-flash {
+            from { background-color: #ef9a9a; }
+            to { background-color: transparent; }
+        }
+        .incorrect-flash { animation: incorrect-flash 0.5s ease-out; }
+        
+        /* --- Game Over Modal --- */
+        #game-over-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none; /* Hidden by default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        #modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        #restart-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s;
+        }
+
+        #restart-btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <h1>🌍 Eco Sort Challenge ♻️</h1>
+        <div id="info-panel">
+            Score: <span id="score">0</span>
+        </div>
+        <div id="main-area">
+            <div class="drop-zone" id="good-zone" data-type="good">
+                <h2>✅ Eco-Friendly</h2>
+            </div>
+            
+            <div id="item-area">
+                <div id="draggable-item" draggable="true">
+                    <img id="item-image" src="" alt="Item to sort">
+                    <p id="item-name"></p>
+                </div>
+            </div>
+
+            <div class="drop-zone" id="bad-zone" data-type="bad">
+                <h2>❌ Not Eco-Friendly</h2>
+            </div>
+        </div>
+    </div>
+    
+    <div id="game-over-modal">
+        <div id="modal-content">
+            <h2>Challenge Complete!</h2>
+            <p id="final-score-text">Your final score is: 100</p>
+            <p id="final-message"></p>
+            <button id="restart-btn">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // --- GAME DATA & VARIABLES ---
+
+        // IMPORTANT: You need to provide the actual images.
+        // I am using placeholder URLs. Replace them with links to your own images.
+        const gameItems = [
+            { name: 'Plastic Bottle', image: './image/plasttic%20bottle.jpg', type: 'bad' },
+            { name: 'Bicycle', image: 'https://img.icons8.com/plasticine/100/000000/bicycle.png', type: 'good' },
+            { name: 'Reusable Bag', image: 'https://img.icons8.com/plasticine/100/000000/shopping-bag.png', type: 'good' },
+            { name: 'Car', image: 'https://img.icons8.com/plasticine/100/000000/car.png', type: 'bad' },
+            { name: 'LED Lightbulb', image: 'https://img.icons8.com/plasticine/100/000000/light-on.png', type: 'good' },
+            { name: 'Plastic Straw', image: './image/plastic%20straw.jpg', type: 'bad' },
+            { name: 'Solar Panel', image: 'https://img.icons8.com/plasticine/100/000000/solar-panel.png', type: 'good' },
+            { name: 'Leaking Faucet', image: './image/Leaky-Faucet-.webp', type: 'bad' }
+        ];
+        const draggableItem = document.getElementById('draggable-item');
+        const itemName = document.getElementById('item-name');
+        const itemImage = document.getElementById('item-image');
+        const scoreDisplay = document.getElementById('score');
+        const dropZones = document.querySelectorAll('.drop-zone');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const finalScoreText = document.getElementById('final-score-text');
+        const finalMessage = document.getElementById('final-message');
+        const restartBtn = document.getElementById('restart-btn');
+
+        // --- DRAG & DROP LOGIC ---
+
+        // When dragging starts
+        draggableItem.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', draggableItem.id);
+            setTimeout(() => {
+                draggableItem.classList.add('dragging');
+            }, 0);
+        });
+
+        // When dragging ends
+        draggableItem.addEventListener('dragend', () => {
+            draggableItem.classList.remove('dragging');
+        });
+
+        // Handle drop zones
+        dropZones.forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault(); // This is necessary to allow dropping
+                zone.classList.add('drag-over');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('drag-over');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('drag-over');
+                const droppedItemType = shuffledItems[currentItemIndex].type;
+                const zoneType = zone.dataset.type;
+
+                if (droppedItemType === zoneType) {
+                    handleCorrectDrop(zone);
+                } else {
+                    handleIncorrectDrop(zone);
+                }
+            });
+        });
+
+        // --- GAME LOGIC FUNCTIONS ---
+
+        function startGame() {
+            score = 0;
+            currentItemIndex = 0;
+            shuffledItems = [...gameItems].sort(() => Math.random() - 0.5); // Shuffle items
+            updateScore();
+            loadNextItem();
+            gameOverModal.style.display = 'none';
+            draggableItem.style.display = 'flex';
+        }
+
+        function loadNextItem() {
+            if (currentItemIndex >= shuffledItems.length) {
+                endGame();
+                return;
+            }
+            const item = shuffledItems[currentItemIndex];
+            itemName.textContent = item.name;
+            itemImage.src = item.image;
+        }
+
+        function updateScore() {
+            scoreDisplay.textContent = score;
+        }
+
+        function handleCorrectDrop(zone) {
+            score += 10;
+            updateScore();
+            zone.classList.add('correct-flash');
+            setTimeout(() => zone.classList.remove('correct-flash'), 500);
+            
+            currentItemIndex++;
+            setTimeout(loadNextItem, 500);
+        }
+
+        function handleIncorrectDrop(zone) {
+            score -= 5;
+            updateScore();
+            zone.classList.add('incorrect-flash');
+            setTimeout(() => zone.classList.remove('incorrect-flash'), 500);
+            // Optionally, you can add a "shake" animation to the item here
+        }
+
+        function endGame() {
+            draggableItem.style.display = 'none';
+            finalScoreText.textContent = `Your final score is: ${score}`;
+            
+            if (score >= 60) {
+                finalMessage.textContent = "Amazing! You're a true Eco-Hero! 🦸";
+            } else if (score >= 30) {
+                finalMessage.textContent = "Great job! You know your stuff. 🌿";
+            } else {
+                finalMessage.textContent = "Good start! Keep learning about how to protect our planet. 🌱";
+            }
+            
+            gameOverModal.style.display = 'flex';
+        }
+
+        // --- INITIALIZE GAME ---
+        restartBtn.addEventListener('click', startGame);
+        document.addEventListener('DOMContentLoaded', startGame);
+
+    </script>
+</body>
+</html>

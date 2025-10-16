@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eco Games Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --good-color: #27ae60;
+            --bad-color: #c0392b;
+            --recycling-color: #3498db;
+            --organic-color: #2ecc71;
+            --ewaste-color: #f1c40f;
+            --landfill-color: #95a5a6;
+            --bg-color: #ecf0f1;
+            --font-color: #34495e;
+            --card-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--font-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            user-select: none;
+        }
+
+        .game-wrapper {
+            width: 95%;
+            max-width: 1000px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .game-container {
+            display: none;
+        }
+
+        /* --- Main Menu Styles --- */
+        #main-menu h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        .menu-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+        .menu-btn {
+            background-color: var(--good-color);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            font-weight: 600;
+            width: 80%;
+            max-width: 400px;
+        }
+        .menu-btn:hover {
+            transform: scale(1.05);
+        }
+        #renewable-btn { background-color: #d35400; } /* New Button Color */
+        #climate-btn { background-color: #2980b9; }
+        #waste-btn { background-color: #8e44ad; }
+        #sustainable-btn { background-color: #27ae60; }
+
+        /* --- Shared Game Styles --- */
+        .game-container h1 { margin-bottom: 20px; }
+        .info-panel {
+            display: flex;
+            justify-content: space-around;
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        .item-spawner {
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .draggable-item {
+            width: 160px;
+            height: 180px;
+            background-color: var(--card-bg);
+            cursor: grab;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+        .draggable-item.dragging {
+            opacity: 0.6;
+            cursor: grabbing;
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .item-image {
+            width: 90px;
+            height: 90px;
+            object-fit: contain;
+            pointer-events: none;
+            border: 2px solid black;
+            border-radius: 5px;
+            padding: 2px;
+        }
+        .item-name { font-weight: 600; margin-top: 10px; }
+
+        /* --- Two-Zone Drop Area --- */
+        .two-zone-area {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        .drop-zone {
+            padding: 20px;
+            border-radius: 15px;
+            border: 4px dashed;
+            min-height: 250px;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .drop-zone.drag-over { transform: scale(1.02); }
+        .drop-zone h2 { margin: 10px 0 0 0; }
+        .drop-zone .icon { font-size: 4em; }
+        
+        #good-zone { border-color: var(--good-color); color: var(--good-color); background-color: rgba(39, 174, 96, 0.1); }
+        #bad-zone { border-color: var(--bad-color); color: var(--bad-color); background-color: rgba(192, 57, 43, 0.1); }
+        #good-zone.drag-over { background-color: rgba(39, 174, 96, 0.2); }
+        #bad-zone.drag-over { background-color: rgba(192, 57, 43, 0.2); }
+        
+        /* --- Four-Bin Drop Area --- */
+        .four-bin-area {
+            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .bin {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            border: 4px solid;
+            transition: background-color 0.3s, transform 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            margin: 0 auto;
+        }
+        .bin.drag-over { transform: scale(1.05); }
+        .bin h2 { margin-top: 5px; font-size: 1.1em; font-weight: 600; }
+        .bin .icon { font-size: 2.8em; }
+
+        #recycling-bin { border-color: var(--recycling-color); color: var(--recycling-color); background-color: rgba(52, 152, 219, 0.1); }
+        #organic-bin { border-color: var(--organic-color); color: var(--organic-color); background-color: rgba(46, 204, 113, 0.1); }
+        #ewaste-bin { border-color: var(--ewaste-color); color: var(--ewaste-color); background-color: rgba(241, 196, 15, 0.1); }
+        #landfill-bin { border-color: var(--landfill-color); color: var(--landfill-color); background-color: rgba(149, 165, 166, 0.15); }
+        #recycling-bin.drag-over { background-color: rgba(52, 152, 219, 0.2); }
+        #organic-bin.drag-over { background-color: rgba(46, 204, 113, 0.2); }
+        #ewaste-bin.drag-over { background-color: rgba(241, 196, 15, 0.2); }
+        #landfill-bin.drag-over { background-color: rgba(149, 165, 166, 0.25); }
+        
+        /* --- Shared Modal and Feedback Styles --- */
+        @keyframes correct-flash { from { opacity: 1; } to { opacity: 1; } } /* Placeholder */
+        .correct-flash { background-color: rgba(39, 174, 96, 0.3) !important; animation: correct-flash 0.5s ease-out; }
+        .incorrect-flash { background-color: rgba(192, 57, 43, 0.3) !important; animation: correct-flash 0.5s ease-out; }
+        
+        #game-over-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); display: none;
+            justify-content: center; align-items: center; z-index: 1000;
+        }
+        #modal-content {
+            background: white; padding: 40px; border-radius: 15px;
+            text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        #badge-container {
+            margin-bottom: 20px;
+        }
+        #badge-image {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        #badge-title {
+            font-size: 1.4em;
+            font-weight: 700;
+            color: #d35400;
+        }
+        
+        .modal-buttons {
+            display: flex; gap: 15px; justify-content: center;
+        }
+        #restart-btn, #menu-btn {
+            color: white; border: none; padding: 15px 30px;
+            font-size: 1.2em; border-radius: 8px; cursor: pointer; margin-top: 20px;
+            transition: background-color 0.3s; font-weight: 600;
+        }
+        #restart-btn { background-color: var(--good-color); }
+        #menu-btn { background-color: #34495e; }
+        #restart-btn:hover { background-color: #229954; }
+        #menu-btn:hover { background-color: #2c3e50; }
+    </style>
+</head>
+<body>
+
+    <div id="main-menu" class="game-wrapper">
+        <h1>🌍 Eco Games Hub 🌿</h1>
+        <div class="menu-buttons">
+            <button class="menu-btn" id="renewable-btn">Renewable Energy Challenge</button>
+            <button class="menu-btn" id="climate-btn">Climate Action Challenge</button>
+            <button class="menu-btn" id="waste-btn">Waste-Wise Challenge</button>
+            <button class="menu-btn" id="sustainable-btn">Sustainable Lifestyle Choices</button>
+        </div>
+    </div>
+    
+    <div id="game-area" class="game-wrapper" style="display: none;">
+        <h1 id="game-title">Game Title</h1>
+        <div class="info-panel">
+            <span>Score: <span class="score">0</span></span>
+            <span class="progress-text">Item 1 / 8</span>
+        </div>
+
+        <div class="item-spawner">
+            <div class="draggable-item" draggable="true">
+                <img class="item-image" src="" alt="Item to sort">
+                <p class="item-name"></p>
+            </div>
+        </div>
+
+        <div class="two-zone-area">
+            <div class="drop-zone" id="good-zone" data-type="good">
+                <div class="icon" id="good-icon">✅</div>
+                <h2 id="good-text">Helps the Planet</h2>
+            </div>
+            <div class="drop-zone" id="bad-zone" data-type="bad">
+                <div class="icon" id="bad-icon">❌</div>
+                <h2 id="bad-text">Harms the Planet</h2>
+            </div>
+        </div>
+
+        <div class="four-bin-area">
+            <div class="bin" id="recycling-bin" data-type="recycling">
+                <div class="icon">♻️</div>
+                <h2>Recycling</h2>
+            </div>
+            <div class="bin" id="organic-bin" data-type="organic">
+                <div class="icon">🌿</div>
+                <h2>Organic</h2>
+            </div>
+            <div class="bin" id="ewaste-bin" data-type="e-waste">
+                <div class="icon">🔋</div>
+                <h2>E-Waste</h2>
+            </div>
+            <div class="bin" id="landfill-bin" data-type="landfill">
+                <div class="icon">🗑️</div>
+                <h2>Landfill</h2>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-over-modal">
+        <div id="modal-content">
+            <div id="badge-container" style="display: none;">
+                <img id="badge-image" src="" alt="Badge Earned">
+                <p id="badge-title"></p>
+            </div>
+            <h2>Challenge Complete!</h2>
+            <p id="final-score-text"></p>
+            <p id="final-message"></p>
+            <div class="modal-buttons">
+                <button id="restart-btn">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- GAME DATA ---
+        const gameData = {
+            renewable: {
+                title: '⚡ Renewable Energy Challenge 💡',
+                items: [
+  { name: 'Solar Panels', image: './image/solar%20panels.jpg', type: 'good' },
+  { name: 'Coal Power Plant', image: './image/coal%20plant.jpg', type: 'bad' },
+  { name: 'Wind Turbines', image: './image/wind%20turbine.jpg', type: 'good' },
+  { name: 'Oil Rig', image: './image/oil%20rig.jpg', type: 'bad' },
+  { name: 'Hydropower Dam', image: './image/hydropower%20dam.jpg', type: 'good' },
+  { name: 'Geothermal Plant', image: './image/geothermal%20plant.jpg', type: 'good' }
+],
+                zones: { good: { text: 'Renewable', icon: '♻️' }, bad: { text: 'Non-Renewable', icon: '🔥' } },
+                endMessages: {
+                    perfect: "Perfect score! You're an Energy Expert! ⚡",
+                    good: "Fantastic! You know the future of energy. ☀️",
+                    ok: "Good job! Keep learning about clean power. 🌱"
+                },
+                badges: {
+                    gold: { title: 'Energy Visionary', image: 'images/badge-gold.jpg' },
+                    silver: { title: 'Clean Energy Pro', image: 'images/badge-silver.jpg' },
+                    bronze: { title: 'Power Apprentice', image: 'images/badge-bronze.jpg' }
+                }
+            },
+           
+          
+        };
+
+        // --- GLOBAL VARIABLES & DOM ELEMENTS ---
+        let score = 0;
+        let currentItemIndex = 0;
+        let shuffledItems = [];
+        let currentGameType = '';
+
+        const mainMenu = document.getElementById('main-menu');
+        const gameArea = document.getElementById('game-area');
+        const draggableItem = document.querySelector('.draggable-item');
+        const itemName = document.querySelector('.item-name');
+        const itemImage = document.querySelector('.item-image');
+        const scoreDisplay = document.querySelector('.score');
+        const progressText = document.querySelector('.progress-text');
+        const twoZoneArea = document.querySelector('.two-zone-area');
+        const fourBinArea = document.querySelector('.four-bin-area');
+        const allDropTargets = document.querySelectorAll('.drop-zone, .bin');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const finalScoreText = document.getElementById('final-score-text');
+        const finalMessage = document.getElementById('final-message');
+        const badgeContainer = document.getElementById('badge-container');
+        const badgeImage = document.getElementById('badge-image');
+        const badgeTitle = document.getElementById('badge-title');
+        
+        // --- CORE GAME LOGIC ---
+        function startGame(type) {
+            currentGameType = type;
+            score = 0;
+            currentItemIndex = 0;
+            const gameConfig = gameData[type];
+            shuffledItems = [...gameConfig.items].sort(() => Math.random() - 0.5);
+
+            mainMenu.style.display = 'none';
+            gameArea.style.display = 'block';
+            gameOverModal.style.display = 'none';
+            draggableItem.style.display = 'flex';
+            
+            document.getElementById('game-title').textContent = gameConfig.title;
+            if (type === 'waste') {
+                twoZoneArea.style.display = 'none';
+                fourBinArea.style.display = 'grid';
+            } else {
+                fourBinArea.style.display = 'none';
+                twoZoneArea.style.display = 'grid';
+                document.getElementById('good-text').textContent = gameConfig.zones.good.text;
+                document.getElementById('good-icon').textContent = gameConfig.zones.good.icon;
+                document.getElementById('bad-text').textContent = gameConfig.zones.bad.text;
+                document.getElementById('bad-icon').textContent = gameConfig.zones.bad.icon;
+            }
+
+            updateScoreAndProgress();
+            loadNextItem();
+        }
+
+        function loadNextItem() {
+            if (currentItemIndex >= shuffledItems.length) {
+                endGame();
+                return;
+            }
+            const item = shuffledItems[currentItemIndex];
+            itemName.textContent = item.name;
+            itemImage.src = item.image;
+        }
+
+        function updateScoreAndProgress() {
+            scoreDisplay.textContent = score;
+            progressText.textContent = `Item ${currentItemIndex + 1} / ${shuffledItems.length}`;
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            const target = e.currentTarget;
+            target.classList.remove('drag-over');
+
+            const droppedItemType = shuffledItems[currentItemIndex].type;
+            const targetType = target.dataset.type;
+
+            if (droppedItemType === targetType) {
+                score += 10;
+                target.classList.add('correct-flash');
+            } else {
+                score -= 5;
+                target.classList.add('incorrect-flash');
+            }
+
+            setTimeout(() => target.classList.remove('correct-flash', 'incorrect-flash'), 500);
+            
+            currentItemIndex++;
+            updateScoreAndProgress();
+            setTimeout(loadNextItem, 300);
+        }
+
+        function endGame() {
+            draggableItem.style.display = 'none';
+            finalScoreText.textContent = `Your final score is: ${score}`;
+            
+            const maxScore = shuffledItems.length * 10;
+            const gameConfig = gameData[currentGameType];
+            const messages = gameConfig.endMessages;
+            const badges = gameConfig.badges;
+            let awardedBadge = null;
+
+            if (score === maxScore) {
+                finalMessage.textContent = messages.perfect;
+                awardedBadge = badges.gold;
+            } else if (score >= maxScore * 0.7) {
+                finalMessage.textContent = messages.good;
+                awardedBadge = badges.silver;
+            } else if (score > 0) {
+                finalMessage.textContent = messages.ok;
+                awardedBadge = badges.bronze;
+            } else {
+                 finalMessage.textContent = messages.ok;
+                 awardedBadge = null;
+            }
+            
+            if (awardedBadge) {
+                badgeImage.src = awardedBadge.image;
+                badgeTitle.textContent = awardedBadge.title;
+                badgeContainer.style.display = 'block';
+            } else {
+                badgeContainer.style.display = 'none';
+            }
+
+            gameOverModal.style.display = 'flex';
+        }
+
+        function showMainMenu() {
+            gameArea.style.display = 'none';
+            gameOverModal.style.display = 'none';
+            mainMenu.style.display = 'block';
+        }
+
+        // --- EVENT LISTENERS ---
+        document.getElementById('renewable-btn').addEventListener('click', () => startGame('renewable'));
+        document.getElementById('climate-btn').addEventListener('click', () => startGame('climate'));
+        document.getElementById('waste-btn').addEventListener('click', () => startGame('waste'));
+        document.getElementById('sustainable-btn').addEventListener('click', () => startGame('sustainable'));
+
+        document.getElementById('restart-btn').addEventListener('click', () => startGame(currentGameType));
+       
+
+        draggableItem.addEventListener('dragstart', () => { setTimeout(() => draggableItem.classList.add('dragging'), 0); });
+        draggableItem.addEventListener('dragend', () => draggableItem.classList.remove('dragging'));
+        
+        allDropTargets.forEach(target => {
+            target.addEventListener('dragover', e => { e.preventDefault(); target.classList.add('drag-over'); });
+            target.addEventListener('dragleave', () => target.classList.remove('drag-over'));
+            target.addEventListener('drop', handleDrop);
+        });
+        document.addEventListener('DOMContentLoaded', () => startGame('renewable'));
+    </script>
+</body>
+</html>

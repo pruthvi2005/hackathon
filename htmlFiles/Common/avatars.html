@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+    <link as="style"
+        href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Spline+Sans%3Awght%40400%3B500%3B700"
+        onload="this.rel='stylesheet'" rel="stylesheet" />
+    <title>Choose Your Avatar - Playora</title>
+    <link rel="shortcut icon" href="../../Images/gamification (2).png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <script type="module" src="../../jsFiles/logout.js"></script>
+    <style type="text/tailwindcss">
+        :root {
+            --primary-50: #f0fdf6;
+            --primary-100: #dcfce9;
+            --primary-200: #bbf7d4;
+            --primary-300: #86efb5;
+            --primary-400: #4ade8f;
+            --primary-500: #20df6c;
+            --primary-600: #16a34a;
+            --primary-700: #15803d;
+            --primary-800: #166534;
+            --primary-900: #14532d;
+            --primary-950: #052e16;
+            --primary-color: #16a34a;
+        }
+
+        .avatar-ring {
+            border: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-ring:hover {
+            border-color: var(--primary-400);
+            transform: scale(1.05);
+        }
+
+        .avatar-ring.selected {
+            border-color: var(--primary-600);
+            box-shadow: 0 0 0 2px var(--primary-200);
+        }
+
+        .category-btn {
+            transition: all 0.2s ease;
+        }
+
+        .category-btn:hover {
+            background-color: var(--primary-50);
+            color: var(--primary-700);
+        }
+
+        .category-btn.active {
+            background-color: var(--primary-600);
+            color: white;
+        }
+    </style>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+</head>
+
+<body class="bg-gray-50">
+    <div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden"
+        style='font-family: "Spline Sans", "Noto Sans", sans-serif;'>
+        <div class="layout-container flex h-full grow flex-col">
+            <!-- Header (matching your existing navbar) -->
+            <header
+                class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 px-10 py-3">
+                <div class="flex items-center gap-4 text-gray-900">
+                    <div class="flex items-center gap-4 text-[#111811]">
+                        <div class="size-8">
+                            <img src="../../../Images/gamification (2).png" alt="Gamification Icon"
+                                class="w-full h-full object-contain" />
+                        </div>
+                        <a href="../studash.html">
+                            <h2 class="text-[#111811] text-lg font-bold leading-tight tracking-[-0.015em]">Playora</h2>
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center gap-8 text-gray-700 font-medium">
+                    <a class="hover:text-gray-900 transition-colors" href="../Student/studash.html">Dashboard</a>
+                    <a class="hover:text-gray-900 transition-colors" href="../Student/play.html">Play</a>
+                    <a class="hover:text-gray-900 transition-colors" href="../Student/compete.html">Compete</a>
+                    <a class="hover:text-gray-900 transition-colors" href="../Common/communityHub.html">Community
+                        Hub</a>
+                    <a class="hover:text-gray-900 transition-colors " href="../Student/leaderboard.html">Leaderboard</a>
+                </div>
+                <div class="flex items-center space-x-4 relative">
+                    <a href="./notifications.html" class="material-icons text-gray-600">notifications</a>
+                    <div class="relative">
+                        <input type="checkbox" id="dropdownToggle" class="hidden peer">
+                        <label for="dropdownToggle" class="flex items-center gap-2 cursor-pointer">
+                            <div
+                                class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
+                                <span class="material-icons text-gray-500">person</span>
+                            </div>
+                        </label>
+                        <div
+                            class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl z-10 p-2 hidden peer-checked:block">
+                            <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 font-semibold hover:bg-gray-100 rounded-md"
+                                href="./avatars.html">
+                                <span class="material-symbols-outlined text-base">face</span>
+                                Profile
+                            </a>
+                            <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                                href="../Student/MyCourses/learn.html">
+                                <span class="material-symbols-outlined text-base">school</span>
+                                My Courses
+                            </a>
+                            <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                                href="../Student/MyAchievements.html">
+                                <span class="material-symbols-outlined text-base">emoji_events</span>
+                                My Achievements
+                            </a>
+                            <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                                href="htmFiles/../../Common/helpSupport.html">
+                                <span class="material-symbols-outlined text-base">help</span>
+                                Help & Support
+                            </a>
+                            <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                                href="../Student/settings.html">
+                                <span class="material-symbols-outlined text-base">settings</span>
+                                Settings
+                            </a>
+                            <div class="my-1 border-t border-gray-100"></div>
+                            <a id="logoutButton" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md" href="">
+                                <span class="material-symbols-outlined text-base">logout</span>
+                                Sign Out
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex flex-1 justify-center py-12 px-4 sm:px-6 lg:px-8">
+                <div class="layout-content-container flex flex-col w-full max-w-5xl">
+
+                    <!-- Page Title -->
+                    <div class="text-center mb-8">
+                        <h1 class="text-3xl font-bold text-[#111811] mb-2">Choose Your Avatar</h1>
+                        <p class="text-gray-600">Select an avatar that represents you in your environmental journey</p>
+                    </div>
+
+                    <!-- Current Selection Display -->
+                    <div class="flex justify-center mb-8">
+                        <div class="text-center">
+                            <p class="text-sm font-medium text-gray-600 mb-3">Current Selection</p>
+                            <div id="currentAvatar"
+                                class="w-32 h-32 bg-center bg-no-repeat bg-cover rounded-full border-4 border-green-500 mx-auto"
+                                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAVyIKOODHNHnX5eltzkTV9W6k7MzAI_-o6hZUscU-IEdnaeEhWb6l2vBCE_o61Tz5eM7t3cWcEXMfOwkbfmjlS2hlyDHRHE8BYYavrkG0CdlaVCnyXl5J6C3cW8tRE1aM9iCZE-mMgoMdLfpvho8Jq0UNR5itDgHvkjTGWq4Q7GP1wT2o32M1UHeiwdIoJkqgEmrf6gzJuZ-G1i5phhoC2aSu5z1aH25AJqOXPOKZntnnwh6f3qG46PPj3qhAVhBGX9eefkJIcgIi5");'>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter -->
+                    <div class="flex justify-center mb-8">
+                        <div class="flex gap-2 p-1 bg-gray-100 rounded-lg">
+                            <button class="category-btn active px-4 py-2 rounded-md text-sm font-medium"
+                                onclick="filterCategory('all')">
+                                All Avatars
+                            </button>
+                            <button class="category-btn px-4 py-2 rounded-md text-sm font-medium"
+                                onclick="filterCategory('nature')">
+                                Nature
+                            </button>
+                            <button class="category-btn px-4 py-2 rounded-md text-sm font-medium"
+                                onclick="filterCategory('eco')">
+                                Eco Heroes
+                            </button>
+                            <button class="category-btn px-4 py-2 rounded-md text-sm font-medium"
+                                onclick="filterCategory('animals')">
+                                Animals
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Avatar Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 mb-12">
+                        <!-- Nature Category -->
+                        <div class="flex justify-center" data-category="nature">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring selected"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/vBGmkPpP/chibi-gardener.png");'>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center" data-category="nature">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/Hn2v3LbZ/chibi-naturegodess.png");'>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center" data-category="nature">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/8CNJgPvB/chibi-mage2.png");'>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center" data-category="nature">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/RFyv44hZ/chibi-naturegirl2.png");'>
+                            </div>
+                        </div>
+
+                        <!-- Eco Heroes Category -->
+                        <div class="flex justify-center" data-category="eco">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/9QJVzWSB/chibi-warrior.png");'>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center" data-category="eco">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/NFdL1Wjh/chibi-archer.png");'>
+                            </div>
+                        </div>
+
+                        <!-- Animals Category -->
+                        <div class="flex justify-center" data-category="animals">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/XJFvzrNg/Gemini-Generated-Image-o7p7keo7p7keo7p7.png");'>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center" data-category="animals">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/JnwrZR3H/Gemini-Generated-Image-kur2c9kur2c9kur2.png");'>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center" data-category="animals">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/Jz45CLkX/Gemini-Generated-Image-tlyqrmtlyqrmtlyq-1.png");'>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center" data-category="animals">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/yxQXk3mH/chibi-wolf.png");'>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center" data-category="animals">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/kMpnvXXY/chibi-bear.png");'>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-center" data-category="eco">
+                            <div class="w-36 h-36 bg-center bg-no-repeat bg-cover rounded-full cursor-pointer avatar-ring"
+                                onclick="selectAvatar(this)"
+                                style='background-image: url("https://i.postimg.cc/wvbSL2Yf/chibi-mage3.png");'>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-between items-center">
+                        <button onclick="goBack()"
+                            class="flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors">
+                            <span class="material-icons text-base">arrow_back</span>
+                            <span class="font-medium">Back</span>
+                        </button>
+
+                        <div class="flex gap-4">
+                            <button onclick="cancelSelection()"
+                                class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-50 transition-colors">
+                                Cancel
+                            </button>
+                            <button onclick="saveAvatar()"
+                                class="flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-[var(--primary-color)] text-white text-base font-bold leading-normal tracking-[0.015em] hover:bg-opacity-90 transition-colors">
+                                <span class="truncate">Save Avatar</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        let selectedAvatarUrl = "https://lh3.googleusercontent.com/aida-public/AB6AXuAVyIKOODHNHnX5eltzkTV9W6k7MzAI_-o6hZUscU-IEdnaeEhWb6l2vBCE_o61Tz5eM7t3cWcEXMfOwkbfmjlS2hlyDHRHE8BYYavrkG0CdlaVCnyXl5J6C3cW8tRE1aM9iCZE-mMgoMdLfpvho8Jq0UNR5itDgHvkjTGWq4Q7GP1wT2o32M1UHeiwdIoJkqgEmrf6gzJuZ-G1i5phhoC2aSu5z1aH25AJqOXPOKZntnnwh6f3qG46PPj3qhAVhBGX9eefkJIcgIi5";
+
+        function selectAvatar(element) {
+            // Remove selection from all avatars
+            document.querySelectorAll('.avatar-ring').forEach(avatar => {
+                avatar.classList.remove('selected');
+            });
+
+            // Add selection to clicked avatar
+            element.classList.add('selected');
+
+            // Get the background image URL
+            const bgImage = element.style.backgroundImage;
+            selectedAvatarUrl = bgImage.slice(5, -2); // Remove url(" and ")
+
+            // Update current selection display
+            document.getElementById('currentAvatar').style.backgroundImage = bgImage;
+
+            console.log("Selected Avatar:", selectedAvatarUrl);
+        }
+
+        function filterCategory(category) {
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show/hide avatars based on category
+            document.querySelectorAll('[data-category]').forEach(avatar => {
+                if (category === 'all' || avatar.dataset.category === category) {
+                    avatar.style.display = 'flex';
+                } else {
+                    avatar.style.display = 'none';
+                }
+            });
+        }
+
+        function saveAvatar() {
+            // Here you would save to your backend
+            // For now, just localStorage demo
+            const avatarData = {
+                url: selectedAvatarUrl,
+                savedAt: new Date().toISOString()
+            };
+
+            // In production, send to your backend:
+            // fetch('/api/user/avatar', {
+            //     method: 'POST',
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ avatarUrl: selectedAvatarUrl })
+            // })
+
+            alert('Avatar saved successfully! 🎉');
+            // Redirect back to dashboard or previous page
+            // window.location.href = '../studash.html';
+        }
+
+        function cancelSelection() {
+            if (confirm('Are you sure you want to cancel? Your selection will not be saved.')) {
+                // Go back to previous page
+                window.history.back();
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        // Initialize page on load
+        document.addEventListener('DOMContentLoaded', function () {
+            // You can load user's current avatar here if needed
+            // const savedAvatar = localStorage.getItem('userAvatar');
+            // if (savedAvatar) {
+            //     // Update UI to show saved avatar
+            // }
+        });
+    </script>
+</body>
+
+</html>

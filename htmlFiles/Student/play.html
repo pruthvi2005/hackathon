@@ -1,0 +1,225 @@
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect" />
+  <link
+      as="style"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900&amp;family=Spline+Sans%3Awght%40400%3B500%3B700"
+      onload="this.rel='stylesheet'"
+      rel="stylesheet"
+    />
+  <link as="style"
+    href="https://fonts.googleapis.com/css2?display=swap&family=Noto+Sans:wght@400;500;700;900&family=Spline+Sans:wght@400;500;700"
+    onload="this.rel='stylesheet'" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  <title>Compete</title>
+  <link rel="shortcut icon" href="../../Images/gamification (2).png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="data:image/x-icon;base64," rel="icon" type="image/x-icon" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script type="module" src="../../jsFiles/logout.js"></script>
+  <style type="text/tailwindcss">
+    /* :root {
+        --primary-color: #20DF6C;
+      }
+      .bg-primary {
+        background-color: var(--primary-color);
+      }
+      .text-primary {
+        color: var(--primary-color);
+      }
+      .border-primary {
+        border-color: var(--primary-color);
+      }
+      .tab-content {
+      display: none;
+    } */
+
+    :root {
+        --primary-50: #f0fdf6;
+        --primary-100: #dcfce9;
+        --primary-200: #bbf7d4;
+        --primary-300: #86efb5;
+        --primary-400: #4ade8f;
+        --primary-500: #20df6c;
+        --primary-600: #16a34a;
+        --primary-700: #15803d;
+        --primary-800: #166534;
+        --primary-900: #14532d;
+        --primary-950: #052e16;
+      }
+
+    /* Show content when radio is checked */
+    #tab-discussions:checked ~ .mt-6 #content-discussions,
+    #tab-news:checked ~ .mt-6 #content-news,
+    #tab-projects:checked ~ .mt-6 #content-projects {
+      display: block;
+    }
+    </style>
+</head>
+
+<body class="bg-gray-50">
+  <div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden"
+    style='font-family: "Spline Sans", "Noto Sans", sans-serif;'>
+    <div class="layout-container flex h-full grow flex-col">
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-gray-200 px-10 py-3">
+        </a>
+        <div class="flex items-center gap-4 text-gray-900">
+          <div class="text-green-500">
+            <img class="w-10" src="../../Images/gamification (2).png" alt="">
+          </div>
+          <div class="flex items-center gap-4 text-[#111811]">
+            <div class="size-8">
+              <img src="../../Images/gamification (2).png" alt="Gamification Icon"
+                class="w-full h-full object-contain" />
+            </div>
+           <a href="../Student/studash.html"> <h2 class="text-[#111811] text-lg font-bold leading-tight tracking-[-0.015em]">EcoLearn</h2></a>
+          </div>
+        </div>
+        <div class="flex items-center gap-8 text-gray-700 font-medium">
+          <a class="hover:text-gray-900 transition-colors" href="../Student/studash.html">Dashboard</a>
+          <a class="text-gray-900 font-semibold" href="">Play</a>
+          <a class="hover:text-gray-900 transition-colors" href="../Student/compete.html">Compete</a>  
+          <a class="hover:text-gray-900 transition-colors" href="../Student/leaderboard.html">Leaderboard</a>
+        </div>
+
+        <div class="flex items-center space-x-4 relative">
+          <a href="htmlFiles/../../Common/notifications.html" class="material-icons text-gray-600">notifications</a>
+          <div class="relative">
+            <!-- hidden checkbox acts as toggle -->
+            <input type="checkbox" id="dropdownToggle" class="hidden peer">
+
+            <!-- button (label for checkbox) -->
+            <label for="dropdownToggle" class="flex items-center gap-2 cursor-pointer">
+              <div class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center hover:bg-gray-300">
+                <span class="material-icons text-gray-500">person</span>
+              </div>
+
+            </label>
+
+            <!-- dropdown menu -->
+            <div class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl z-10 p-2 hidden peer-checked:block">
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="../Common/avatars.html">
+                <span class="material-symbols-outlined text-base">face</span>
+                Profile
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="../Student/MyCourses/climateChange.html">
+                <span class="material-symbols-outlined text-base">school</span>
+                My Courses
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="../Student/MyAchievements.html">
+                <span class="material-symbols-outlined text-base">emoji_events</span>
+                My Achievements
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="htmFiles/../../Common/helpSupport.html">
+                <span class="material-symbols-outlined text-base">help</span>
+                Help & Support
+              </a>
+              <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
+                href="htmlFiles/../../Student/settings.html">
+                <span class="material-symbols-outlined text-base">settings</span>
+                Settings
+              </a>
+              <div class="my-1 border-t border-gray-100"></div>
+              <a id="logoutButton" class="flex items-center gap-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md" href="">
+                <span class="material-symbols-outlined text-base">logout</span>
+                Sign Out
+              </a>
+            </div>
+          </div>
+        </div>
+      </header>
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="flex flex-wrap justify-between gap-3 p-4">
+              <div class="flex min-w-72 flex-col gap-3">
+                <p class="text-[#0e1a13] tracking-light text-[32px] font-bold leading-tight">Games</p>
+                <p class="text-[#51946c] text-sm font-normal leading-normal">Test your eco-knowledge and have fun with our interactive games.</p>
+              </div>
+           
+           
+            </div>
+            <div class="grid grid-cols-[repeat(auto-fit,minmax(158px,1fr))] gap-3 p-4">
+              <!-- Games from game/ folder -->
+              <div class="flex flex-col gap-3 pb-3">
+                <a href="../../game/waste.html">
+                  <div
+                    class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                    style='background-image: url("../../game/image/soda%20%20can.jpg");'
+                  ></div>
+                  <div>
+                    <p class="text-[#0e1a13] text-base font-medium leading-normal">Waste-Wise Challenge</p>
+                    <p class="text-[#51946c] text-sm font-normal leading-normal">Sort items into the correct bins to score points.</p>
+                  </div>
+                </a>
+              </div>
+
+              <div class="flex flex-col gap-3 pb-3">
+                <a href="../../game/eco.html">
+                  <div
+                    class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                    style='background-image: url("../../game/image/planting%20a%20tree.jpg");'
+                  ></div>
+                  <div>
+                    <p class="text-[#0e1a13] text-base font-medium leading-normal">Eco Actions</p>
+                    <p class="text-[#51946c] text-sm font-normal leading-normal">Make eco-friendly choices and learn their impact.</p>
+                  </div>
+                </a>
+              </div>
+
+              <div class="flex flex-col gap-3 pb-3">
+                <a href="../../game/renewable.html">
+                  <div
+                    class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                    style='background-image: url("../../game/image/wind%20turbine.jpg");'
+                  ></div>
+                  <div>
+                    <p class="text-[#0e1a13] text-base font-medium leading-normal">Renewable Energy Quiz</p>
+                    <p class="text-[#51946c] text-sm font-normal leading-normal">Test your knowledge on clean energy sources.</p>
+                  </div>
+                </a>
+              </div>
+
+              <div class="flex flex-col gap-3 pb-3">
+                <a href="../../game/sustainable.html">
+                  <div
+                    class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                    style='background-image: url("../../game/image/reusable%20cup.jpg");'
+                  ></div>
+                  <div>
+                    <p class="text-[#0e1a13] text-base font-medium leading-normal">Sustainable Living</p>
+                    <p class="text-[#51946c] text-sm font-normal leading-normal">Learn practical tips for everyday sustainability.</p>
+                  </div>
+                </a>
+              </div>
+
+              <div class="flex flex-col gap-3 pb-3">
+               <a href="./save_the_forest_game2.html"> <div
+                  class="w-full bg-center bg-no-repeat aspect-square bg-cover rounded-xl"
+                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCFC4_Fos1U5dBfIIRUpDU9_n0se0mFHqlCKZVAh81Hj1Ki_fAzkfQeIuInl-eD4BXtuOEt3pzuqbqz2xD8H2woxIdNiT0EmIta_SujvQvACRqWjmn3w_jIabq9V9A5mametqU18EUHgIZ_YtgMik9xmuxZNnyeHCXEE2gziFKlAUyXTSxSkcAmpl72eXJ5P1-QCCmqIwtzwcU0KloCdCnPANt0oxlslx03x5S4pAlaDqlhZSLxLZxcVZbcHyEI3nadisCMFdYgeDs");'
+                ></div>
+                <div>
+                  <p class="text-[#0e1a13] text-base font-medium leading-normal">Eco Warriors</p>
+                  <p class="text-[#51946c] text-sm font-normal leading-normal">A strategy game where you build and manage an eco-friendly city.</p>
+                </div></a>
+              </div>
+
+              <!-- Waste -->
+            
+
+              <!-- Water -->
+              
+                </a>
+              </div>
+
+            </div>
+          </div>
