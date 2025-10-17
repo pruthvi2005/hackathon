@@ -67,14 +67,14 @@
         </a>
         <div class="flex items-center gap-4 text-gray-900">
           <div class="text-green-500">
-            <img class="w-10" src="gamification.png" alt="">
+            <img class="w-10" src="../../Images/gamification (2).png" alt="Gamification Icon">
           </div>
           <div class="flex items-center gap-4 text-[#111811]">
             <div class="size-8">
               <img src="../../Images/gamification (2).png" alt="Gamification Icon"
                 class="w-full h-full object-contain" />
             </div>
-           <a href="../Student/studash.html"> <h2 class="text-[#111811] text-lg font-bold leading-tight tracking-[-0.015em]">Playora</h2></a>
+           <a href="../Student/studash.html"> <h2 class="text-[#111811] text-lg font-bold leading-tight tracking-[-0.015em]">EcoLearn</h2></a>
           </div>
         </div>
         <div class="flex items-center gap-8 text-gray-700 font-medium">
@@ -214,9 +214,11 @@
     </div>
   </div>
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+  import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
   import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
 
+  // Initialize Firebase only if it hasn't been initialized yet
+  let app, db;
   const firebaseConfig = {
     apiKey: "AIzaSyB8ouWfnnQ3YkpvRl65BZzjdwITHLLhhtc",
     authDomain: "ecolearn-7152f.firebaseapp.com",
@@ -227,8 +229,13 @@
     measurementId: "G-7FD6V3M1EL"
   };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
+  if (!getApps().length) {
+    app = initializeApp(firebaseConfig);
+  } else {
+    app = getApps()[0];
+  }
+  
+  db = getFirestore(app);
 
   const schoolSelect = document.getElementById('school-filter');
   const schoolTbody = document.getElementById('school-tbody');

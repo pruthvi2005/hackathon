@@ -74,7 +74,7 @@
               <img src="../../Images/gamification (2).png" alt="Gamification Icon"
                 class="w-full h-full object-contain" />
             </div>
-           <a href="../Student/studash.html"> <h2 class="text-[#111811] text-lg font-bold leading-tight tracking-[-0.015em]">Playora</h2></a>
+           <a href="../Student/studash.html"> <h2 class="text-[#111811] text-lg font-bold leading-tight tracking-[-0.015em]">EcoLearn</h2></a>
           </div>
         </div>
         <div class="flex items-center gap-8 text-gray-700 font-medium">
@@ -170,8 +170,11 @@
                     <h3 class="mt-2 text-lg font-bold text-gray-900">Eco-Warrior Quiz Challenge</h3>
                     <p class="mt-2 text-sm text-gray-600">Test your knowledge on environmental issues and compete for
                       the top spot.</p>
-                    <a class="mt-4 inline-block rounded-lg bg-green-500 px-4 py-2 text-sm font-semibold text-white hover:bg-green-600"
-                      href="#">View Challenge</a>
+                    <div class="mt-4 flex items-center gap-3">
+                      <a class="inline-block rounded-lg bg-green-500 px-4 py-2 text-sm font-semibold text-white hover:bg-green-600"
+                        href="../../../game/eco.html">View Challenge</a>
+                      <button id="claim-individual-quiz" class="inline-block rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600">Claim Points</button>
+                    </div>
                   </div>
                 </div>
 
@@ -185,8 +188,11 @@
                     <h3 class="mt-2 text-lg font-bold text-gray-900">Sustainable Living Challenge</h3>
                     <p class="mt-2 text-sm text-gray-600">Earn points by completing daily sustainable actions like
                       reducing waste and saving energy.</p>
-                    <a class="mt-4 inline-block rounded-lg bg-green-500 px-4 py-2 text-sm font-semibold text-white hover:bg-green-600"
-                      href="#">View Challenge</a>
+                    <div class="mt-4 flex items-center gap-3">
+                      <a class="inline-block rounded-lg bg-green-500 px-4 py-2 text-sm font-semibold text-white hover:bg-green-600"
+                        href="../../../game/sustainable.html">View Challenge</a>
+                      <button id="claim-daily-actions" class="inline-block rounded-lg bg-emerald-500 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-600">Claim Points</button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -303,6 +309,27 @@
       document.getElementById('label-individual').classList.add('border-green-500', 'text-green-600');
       contents['tab-individual'].classList.remove('hidden');
       contents['tab-individual'].classList.add('block');
+    });
+  </script>
+
+  <script type="module">
+    import { awardPoints } from "../../jsFiles/points.js";
+
+    const btnQuiz = document.getElementById('claim-individual-quiz');
+    const btnDaily = document.getElementById('claim-daily-actions');
+
+    btnQuiz?.addEventListener('click', async () => {
+      btnQuiz.disabled = true; btnQuiz.textContent = 'Claiming...';
+      const res = await awardPoints(100, 'compete_quiz');
+      btnQuiz.textContent = res.success ? '✓ Points Claimed!' : 'Error - Try Again';
+      btnQuiz.disabled = !res.success ? false : true;
+    });
+
+    btnDaily?.addEventListener('click', async () => {
+      btnDaily.disabled = true; btnDaily.textContent = 'Claiming...';
+      const res = await awardPoints(50, 'compete_daily');
+      btnDaily.textContent = res.success ? '✓ Points Claimed!' : 'Error - Try Again';
+      btnDaily.disabled = !res.success ? false : true;
     });
   </script>
 

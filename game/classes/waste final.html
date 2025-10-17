@@ -205,6 +205,7 @@
         <div id="results-step" class="hide">
             <h2>Lesson Complete!</h2>
             <p id="final-score">You got 0 out of 5 correct!</p>
+            <button id="claim-points-btn" class="play-again-btn">Claim Points</button>
             <button id="play-again-btn" class="play-again-btn">Start Over</button>
         </div>
     </div>
@@ -357,27 +358,54 @@
             currentQuestionIndex++;
             if (currentQuestionIndex < shuffledQuestions.length) {
                 showQuestion(shuffledQuestions[currentQuestionIndex]);
-            } else {
                 showResults();
             }
         }
         
-        function showResults() {
+        async function showResults() {
             showStep(3);
-            finalScoreElement.innerText = `You scored ${score} out of ${shuffledQuestions.length}!`;
-        }
-        
-        function startOver() {
-            showStep(1);
-        }
+            finalScoreElement.textContent = `You scored ${score} out of ${questions.length}`;
+            
+            // Set up the claim points button
+            const claimBtn = document.getElementById("claim-points-btn");
+            const LESSON_SOURCE = 'waste_management_quiz';
 
-        // Event Listeners
-        startQuizBtn.addEventListener('click', startQuiz);
-        nextQuestionBtn.addEventListener('click', handleNextButton);
-        playAgainBtn.addEventListener('click', startOver);
-        
-        // Initial state
-        startOver();
+            function computeLessonPoints(scoreVal, total) {
+                const completion = 50;      // base for completing the lesson
+                const quizBonus = scoreVal * 10; // +10 per correct answer
+                return completion + quizBonus;
+            }
+
+            claimBtn?.addEventListener("click", async () => {
+                try {
+                    claimBtn.disabled = true;
+                    claimBtn.textContent = "Claiming...";
+                    
+                    const total = Array.isArray(shuffledQuestions) ? shuffledQuestions.length : 0;
+                    const points = computeLessonPoints(score || 0, total);
+                    
+                    const result = await awardPoints(points, LESSON_SOURCE);
+                    
+                    if (result.success) {
+                        claimBtn.textContent = "✓ Points Claimed!";
+                        claimBtn.style.backgroundColor = "#2ecc71";
+                    } else {
+                        claimBtn.textContent = "Error - Try Again";
+                        claimBtn.disabled = false;
+                        if (result.redirect) {
+                            window.location.href = result.redirect;
+                        } else if (result.message) {
+                            alert(result.message);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error claiming points:", error);
+                    claimBtn.textContent = "Error - Try Again";
+                    claimBtn.disabled = false;
+                    alert("An error occurred while claiming points. Please try again.");
+                }
+            });
+        }
     </script>
 </body>
 </html>

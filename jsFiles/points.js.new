@@ -83,9 +83,8 @@ const firebaseConfig = {
     authDomain: "ecolearn-7152f.firebaseapp.com",
     projectId: "ecolearn-7152f",
     storageBucket: "ecolearn-7152f.firebasestorage.app",
-    messagingSenderId: "656526494781",
-    appId: "1:656526494781:web:e49084105be0db03102e54",
-    measurementId: "G-JS5675TB3K" // Updated to match the server's measurement ID
+    messagingSenderId: "1097902011754",
+    appId: "1:1097902011754:web:1f7b8c9e8f0a1b2c3d4e5f"
 };
 
 // Initialize Firebase
@@ -177,8 +176,8 @@ async function awardPoints(points, source = '') {
         }
 
         const userData = userDoc.data();
-        const userSchool = userData.schoolName || userData.school || "Unknown School";
-        const displayName = userData.username || userData.Name || user.displayName || user.email.split('@')[0];
+        const userSchool = userData.school || "Unknown School";
+        const displayName = user.displayName || user.email.split('@')[0];
 
         // Update user's points
         const updateData = {
@@ -355,7 +354,7 @@ const PointsSystem = {
     db     // Export db for other modules to use
 };
 
-export { PointsSystem, awardPoints };
+export { PointsSystem };
 
 // Initialize auth state listener to handle user changes
 onAuthStateChanged(auth, async (user) => {

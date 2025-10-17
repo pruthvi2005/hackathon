@@ -324,9 +324,11 @@
       const claimBtn = document.getElementById('claim-points-btn');
       claimBtn?.addEventListener('click', async () => {
         const points = Math.max(0, Number(window.__finalScore || 0));
-        await awardPoints(points);
         claimBtn.disabled = true;
-        claimBtn.textContent = 'Points Claimed';
+        claimBtn.textContent = 'Claiming...';
+        const res = await awardPoints(points, 'waste_game');
+        claimBtn.textContent = res.success ? '✓ Points Claimed!' : 'Error - Try Again';
+        claimBtn.disabled = !res.success ? false : true;
       });
     </script>
 </body>

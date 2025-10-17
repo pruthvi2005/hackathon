@@ -205,6 +205,7 @@
         <div id="results-step" class="hide">
             <h2>Lesson Complete!</h2>
             <p id="final-score">You got 0 out of 5 correct!</p>
+            <button id="claim-points-btn" class="play-again-btn">Claim Points</button>
             <button id="play-again-btn" class="play-again-btn">Start Over</button>
         </div>
     </div>
@@ -378,6 +379,50 @@
         
         // Initial state
         startOver();
+    </script>
+
+    <!-- Points claim wiring -->
+    <script type="module">
+        import { awardPoints } from "../../jsFiles/points.js";
+
+        const claimBtn = document.getElementById("claim-points-btn");
+        const LESSON_SOURCE = 'water_conservation_quiz';
+
+        function computeLessonPoints(scoreVal, total) {
+            const completion = 50;      // base for completing the lesson
+            const quizBonus = scoreVal * 10; // +10 per correct answer
+            return completion + quizBonus;
+        }
+
+        claimBtn?.addEventListener("click", async () => {
+            try {
+                claimBtn.disabled = true;
+                claimBtn.textContent = "Claiming...";
+                
+                const total = Array.isArray(window.shuffledQuestions) ? window.shuffledQuestions.length : 0;
+                const points = computeLessonPoints(window.score || 0, total);
+                
+                const result = await awardPoints(points, LESSON_SOURCE);
+                
+                if (result.success) {
+                    claimBtn.textContent = "✓ Points Claimed!";
+                    claimBtn.style.backgroundColor = "#2ecc71";
+                } else {
+                    claimBtn.textContent = "Error - Try Again";
+                    claimBtn.disabled = false;
+                    if (result.redirect) {
+                        window.location.href = result.redirect;
+                    } else if (result.message) {
+                        alert(result.message);
+                    }
+                }
+            } catch (error) {
+                console.error("Error claiming points:", error);
+                claimBtn.textContent = "Error - Try Again";
+                claimBtn.disabled = false;
+                alert("An error occurred while claiming points. Please try again.");
+            }
+        });
     </script>
 </body>
 </html>

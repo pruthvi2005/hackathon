@@ -301,6 +301,10 @@
             shuffledQuestions = questions.sort(() => Math.random() - 0.5);
             currentQuestionIndex = 0;
             score = 0;
+            // expose state for module script
+            window.shuffledQuestions = shuffledQuestions;
+            window.totalQuestions = shuffledQuestions.length;
+            window.score = score;
             scoreText.innerText = `Score: ${score}`;
             showQuestion(shuffledQuestions[currentQuestionIndex]);
         }
@@ -335,6 +339,7 @@
 
             if (correct) {
                 score++;
+                window.score = score; // keep global in sync
                 scoreText.innerText = `Score: ${score}`;
             }
             setStatusClass(selectedButton, correct);
@@ -365,6 +370,7 @@
         
         function showResults() {
             showStep(3);
+            window.score = score; // ensure module can read final score
             finalScoreElement.innerText = `You scored ${score} out of ${shuffledQuestions.length}!`;
         }
         function startOver() {
@@ -382,9 +388,11 @@
 
     <!-- Points claim wiring -->
     <script type="module">
+        // Use the correct relative path to points.js
         import { awardPoints } from "../../jsFiles/points.js";
 
         const claimBtn = document.getElementById("claim-points-btn");
+        const LESSON_SOURCE = 'biodiversity_quiz';
 
         function computeLessonPoints(scoreVal, total) {
             const completion = 50;      // base for completing the lesson
@@ -393,12 +401,33 @@
         }
 
         claimBtn?.addEventListener("click", async () => {
-            // 'score' and 'shuffledQuestions' are defined in the main script above
-            const total = Array.isArray(window.shuffledQuestions) ? window.shuffledQuestions.length : 0;
-            const points = computeLessonPoints(window.score || 0, total);
-            await awardPoints(points);
-            claimBtn.disabled = true;
-            claimBtn.textContent = "Points Claimed";
+            try {
+                claimBtn.disabled = true;
+                claimBtn.textContent = "Claiming...";
+                
+                const total = Array.isArray(window.shuffledQuestions) ? window.shuffledQuestions.length : 0;
+                const points = computeLessonPoints(window.score || 0, total);
+                
+                const result = await awardPoints(points, LESSON_SOURCE);
+                
+                if (result.success) {
+                    claimBtn.textContent = "✓ Points Claimed!";
+                    claimBtn.style.backgroundColor = "#2ecc71";
+                } else {
+                    claimBtn.textContent = "Error - Try Again";
+                    claimBtn.disabled = false;
+                    if (result.redirect) {
+                        window.location.href = result.redirect;
+                    } else if (result.message) {
+                        alert(result.message);
+                    }
+                }
+            } catch (error) {
+                console.error("Error claiming points:", error);
+                claimBtn.textContent = "Error - Try Again";
+                claimBtn.disabled = false;
+                alert("An error occurred while claiming points. Please try again.");
+            }
         });
     </script>
 </body>

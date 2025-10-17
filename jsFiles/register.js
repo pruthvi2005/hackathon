@@ -69,7 +69,9 @@ document.getElementById("signupBtn").addEventListener("click", function (event) 
         schoolName: schoolName || "",
         username: username1,
         userType: userType,
-        email: user.email
+        email: user.email,
+        ecoPoints: 0,            // initialize points
+        scores: { general: 0 }   // initialize scores map
       }).then(() => {
         return userType; // pass along to next .then
       });

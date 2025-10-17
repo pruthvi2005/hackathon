@@ -40,14 +40,14 @@
         </a>
         <div class="flex items-center gap-4 text-gray-900">
           <div class="text-green-500">
-            <img class="w-10 invisible width:40; height: 0;" src="gamification.png" alt="">
+            <img class="w-10 h-10" src="../../Images/gamification%20(2).png" alt="EcoLearn Logo">
           </div>
           <div class="flex items-center gap-4 text-[#111811]">
             <div class="size-8">
               <img src="../../Images/gamification (2).png" alt="Gamification Icon"
                 class="w-full h-full object-contain" />
             </div>
-           <a href="EduDash.html"> <h2 class="text-[#111811] text-lg font-bold leading-tight tracking-[-0.015em]">Playora</h2></a>
+           <a href="EduDash.html"> <h2 class="text-[#111811] text-lg font-bold leading-tight tracking-[-0.015em]">EcoLearn</h2></a>
           </div>
         </div>
       <div class="flex items-center gap-8 text-gray-700 font-medium ">
@@ -98,6 +98,155 @@
             class="layout-content-container flex flex-col w-full max-w-6xl gap-8"
           >
             <!-- Title + Create New -->
+            <div class="flex justify-between items-center px-4">
+              <h1 class="text-2xl font-bold text-gray-900">Content Management</h1>
+              <button id="newContentBtn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+                <span class="material-icons">add</span>
+                Create New Content
+              </button>
+            </div>
+
+            <!-- New Content Modal -->
+            <div id="contentModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+              <div class="bg-white rounded-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                  <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">Create New Content</h3>
+                    <button id="closeModal" class="text-gray-500 hover:text-gray-700">
+                      <span class="material-icons">close</span>
+                    </button>
+                  </div>
+                  
+                  <form id="contentForm" class="space-y-4">
+                    <div>
+                      <label for="contentType" class="block text-sm font-medium text-gray-700 mb-1">Content Type</label>
+                      <select id="contentType" name="contentType" class="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500">
+                        <option value="lesson">Lesson</option>
+                        <option value="quiz">Quiz</option>
+                        <option value="assignment">Assignment</option>
+                        <option value="video">Video</option>
+                        <option value="game">Interactive Game</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label for="contentTitle" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                      <input type="text" id="contentTitle" name="contentTitle" required
+                        class="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500">
+                    </div>
+
+                    <div>
+                      <label for="contentDescription" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                      <textarea id="contentDescription" name="contentDescription" rows="3"
+                        class="w-full p-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"></textarea>
+                    </div>
+
+                    <!-- Quiz Fields (initially hidden) -->
+                    <div id="quizFields" class="hidden space-y-4">
+                      <div class="border-t border-gray-200 pt-4">
+                        <h4 class="font-medium text-gray-900 mb-3">Quiz Questions</h4>
+                        <div id="questionsContainer">
+                          <!-- Questions will be added here dynamically -->
+                        </div>
+                        <button type="button" id="addQuestionBtn" class="mt-2 text-sm text-green-600 hover:text-green-800 flex items-center">
+                          <span class="material-icons text-sm mr-1">add_circle</span>
+                          Add Question
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center">
+                      <input id="isPublished" name="isPublished" type="checkbox"
+                        class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                      <label for="isPublished" class="ml-2 block text-sm text-gray-700">
+                        Publish immediately
+                      </label>
+                    </div>
+
+                    <div class="flex justify-end space-x-3 pt-4">
+                      <button type="button" id="cancelBtn" class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50">
+                        Cancel
+                      </button>
+                      <button type="submit" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                        Save Content
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg z-50">
+              Content created successfully!
+            </div>
+                  
+                  <form id="contentForm" class="space-y-4">
+                    <div>
+                      <label for="contentType" class="block text-sm font-medium text-gray-700 mb-1">Content Type</label>
+                      <select id="contentType" name="contentType" required 
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                        <option value="">Select content type</option>
+                        <option value="lesson">Lesson</option>
+                        <option value="quiz">Quiz</option>
+                        <option value="assignment">Assignment</option>
+                        <option value="video">Video</option>
+                        <option value="game">Interactive Game</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label for="contentTitle" class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                      <input type="text" id="contentTitle" name="contentTitle" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                        placeholder="Enter content title">
+                    </div>
+
+                    <div>
+                      <label for="contentDescription" class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                      <textarea id="contentDescription" name="contentDescription" rows="3"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                        placeholder="Enter a brief description"></textarea>
+                    </div>
+
+                    <div id="quizFields" class="hidden space-y-4">
+                      <div class="border-t border-gray-200 pt-4">
+                        <h4 class="font-medium text-gray-900 mb-3">Quiz Questions</h4>
+                        <div id="questionsContainer">
+                          <!-- Questions will be added here dynamically -->
+                        </div>
+                        <button type="button" id="addQuestionBtn" class="mt-2 text-sm text-green-600 hover:text-green-800 flex items-center">
+                          <span class="material-icons text-sm mr-1">add_circle</span>
+                          Add Question
+                        </button>
+                      </div>
+                    </div>
+
+                    <div class="flex items-center">
+                      <input id="isPublished" name="isPublished" type="checkbox" 
+                        class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded">
+                      <label for="isPublished" class="ml-2 block text-sm text-gray-700">
+                        Publish immediately
+                      </label>
+                    </div>
+
+                    <div class="flex justify-end gap-3 pt-4 border-t border-gray-200">
+                      <button type="button" id="cancelBtn" class="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg">
+                        Cancel
+                      </button>
+                      <button type="submit" class="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-700 rounded-lg">
+                        Save Content
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="hidden fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg z-50">
+              Content created successfully!
+            </div>
             <div class="flex flex-wrap items-center justify-between gap-4">
               <div class="flex flex-col gap-1">
                 <h2
@@ -179,6 +328,17 @@
                 </nav>
               </div>
             </div>
+
+            <!-- Content List -->
+            <section class="flex flex-col gap-4 mt-8">
+              <h3 class="text-xl font-bold text-gray-900 px-4">My Content</h3>
+              <div id="contentList" class="bg-white shadow overflow-hidden sm:rounded-lg">
+                <!-- Content will be loaded here -->
+                <div class="px-6 py-4 text-center text-gray-500">
+                  You haven't created any content yet. Click "Create New Content" to get started.
+                </div>
+              </div>
+            </section>
 
             <!-- My Quizzes -->
             <section class="flex flex-col gap-4">
@@ -446,5 +606,253 @@
       </div>
     </div>
   </body>
-  <script src="../scripts/dropdown.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-firestore.js";
+
+    // Initialize Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyB8ouWfnnQ3YkpvRl65BZzjdwITHLLhhtc",
+      authDomain: "ecolearn-7152f.firebaseapp.com",
+      projectId: "ecolearn-7152f",
+      storageBucket: "ecolearn-7152f.firebasestorage.app",
+      messagingSenderId: "656526494781",
+      appId: "1:656526494781:web:e49084105be0db03102e54"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // DOM Elements
+    const modal = document.getElementById('contentModal');
+    const newContentBtn = document.getElementById('newContentBtn');
+    const closeModal = document.getElementById('closeModal');
+    const cancelBtn = document.getElementById('cancelBtn');
+    const contentForm = document.getElementById('contentForm');
+    const contentTypeSelect = document.getElementById('contentType');
+    const quizFields = document.getElementById('quizFields');
+    const questionsContainer = document.getElementById('questionsContainer');
+    const addQuestionBtn = document.getElementById('addQuestionBtn');
+    const successMessage = document.getElementById('successMessage');
+    let questionCount = 0;
+
+    // Initialize event listeners
+    function initEventListeners() {
+      if (newContentBtn) newContentBtn.addEventListener('click', toggleModal);
+      if (closeModal) closeModal.addEventListener('click', toggleModal);
+      if (cancelBtn) cancelBtn.addEventListener('click', toggleModal);
+      if (contentForm) contentForm.addEventListener('submit', handleSubmit);
+      if (contentTypeSelect) contentTypeSelect.addEventListener('change', toggleQuizFields);
+      if (addQuestionBtn) addQuestionBtn.addEventListener('click', addQuestion);
+    }
+
+    // Format Date
+    function formatDate(date) {
+      return new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Toggle modal
+    function toggleModal() {
+      if (modal) {
+        modal.classList.toggle('hidden');
+        document.body.style.overflow = modal.classList.contains('hidden') ? 'auto' : 'hidden';
+      }
+    }
+
+    // Show/hide quiz fields based on content type
+    function toggleQuizFields() {
+      if (contentTypeSelect && quizFields) {
+        if (contentTypeSelect.value === 'quiz') {
+          quizFields.classList.remove('hidden');
+        } else {
+          quizFields.classList.add('hidden');
+        }
+      }
+    }
+
+    // Add question fields
+    function addQuestion() {
+      if (!questionsContainer) return;
+      
+      questionCount++;
+      const questionId = `q${Date.now()}`;
+      const questionDiv = document.createElement('div');
+      questionDiv.className = 'question-item mb-6 p-4 border border-gray-200 rounded-lg';
+      questionDiv.innerHTML = `
+        <div class="flex justify-between items-center mb-2">
+          <h5 class="font-medium">Question ${questionCount}</h5>
+          <button type="button" class="text-red-500 hover:text-red-700 remove-question">
+            <span class="material-icons text-sm">delete</span>
+          </button>
+        </div>
+        <div class="mb-3">
+          <input type="text" name="question-${questionId}" required
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg"
+            placeholder="Enter question">
+        </div>
+        <div class="space-y-2 ml-4">
+          ${[1, 2, 3, 4].map((_, i) => `
+            <div class="flex items-center">
+              <input type="radio" name="correct-${questionId}" value="${i}" ${i === 0 ? 'checked' : ''}
+                class="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300">
+              <input type="text" name="option-${questionId}-${i}" required
+                class="ml-2 px-3 py-1 border border-gray-300 rounded-lg w-full"
+                placeholder="Option ${i + 1}">
+            </div>
+          `).join('')}
+        </div>
+      `;
+      
+      // Add delete functionality
+      const deleteBtn = questionDiv.querySelector('.remove-question');
+      if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => {
+          questionDiv.remove();
+          questionCount--;
+          // Renumber remaining questions
+          document.querySelectorAll('.question-item').forEach((item, index) => {
+            const title = item.querySelector('h5');
+            if (title) title.textContent = `Question ${index + 1}`;
+          });
+        });
+      }
+      
+      questionsContainer.appendChild(questionDiv);
+    }
+
+    // Handle form submission
+    async function handleSubmit(e) {
+      e.preventDefault();
+      
+      if (!contentForm || !auth.currentUser) {
+        window.location.href = '../Welcome/signin.html';
+        return;
+      }
+
+      const user = auth.currentUser;
+      const formData = new FormData(contentForm);
+      const contentData = {
+        type: formData.get('contentType'),
+        title: formData.get('contentTitle'),
+        description: formData.get('contentDescription'),
+        isPublished: formData.get('isPublished') === 'on',
+        createdAt: serverTimestamp(),
+        createdBy: user.uid,
+        school: ''
+      };
+
+      try {
+        // Get user's school
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          contentData.school = userDoc.data().schoolName || '';
+        }
+
+        // Handle quiz questions if content type is quiz
+        if (contentData.type === 'quiz' && questionsContainer) {
+          const questions = [];
+          const questionItems = questionsContainer.querySelectorAll('.question-item');
+          
+          questionItems.forEach((item) => {
+            const questionInput = item.querySelector('input[type="text"]');
+            if (!questionInput) return;
+            
+            const questionText = questionInput.value;
+            const options = [];
+            let correctAnswer = 0;
+            
+            // Get all option inputs
+            const optionInputs = item.querySelectorAll('input[type="text"]:not([name^="question-"])');
+            optionInputs.forEach((input, index) => {
+              options.push(input.value);
+              // Check if this option is the correct answer
+              const radioInput = input.previousElementSibling;
+              if (radioInput && radioInput.checked) {
+                correctAnswer = index;
+              }
+            });
+            
+            if (questionText) {
+              questions.push({
+                text: questionText,
+                options: options,
+                correctAnswer: correctAnswer
+              });
+            }
+          });
+          
+          if (questions.length > 0) {
+            contentData.questions = questions;
+          }
+        }
+
+        // Save to Firestore
+        const docRef = await addDoc(collection(db, 'content'), contentData);
+        console.log('Document written with ID: ', docRef.id);
+        
+        // Show success message
+        if (successMessage) {
+          successMessage.classList.remove('hidden');
+          setTimeout(() => {
+            successMessage.classList.add('hidden');
+          }, 3000);
+        }
+        
+        // Reset form and close modal
+        if (contentForm) contentForm.reset();
+        if (questionsContainer) questionsContainer.innerHTML = '';
+        questionCount = 0;
+        toggleModal();
+        
+      } catch (error) {
+        console.error('Error adding document: ', error);
+        alert('Error creating content. Please try again.');
+      }
+    }
+
+    // Initialize the page
+    function init() {
+      initEventListeners();
+      
+      // Close modal when clicking outside
+      window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          toggleModal();
+        }
+      });
+      
+      // Initialize any other components
+      if (contentTypeSelect && contentTypeSelect.value === 'quiz') {
+        quizFields.classList.remove('hidden');
+      }
+    }
+    
+    // Start the application
+    document.addEventListener('DOMContentLoaded', init);
+      if (e.target.closest('.remove-question')) {
+        e.target.closest('.question-item').remove();
+        // Renumber remaining questions
+        document.querySelectorAll('.question-item h5').forEach((el, i) => {
+          el.textContent = `Question ${i + 1}`;
+        });
+      }
+  </script>
+  <style>
+    /* Add some additional styles for better modal scrolling */
+    @media (max-height: 640px) {
+      #contentModal .bg-white {
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+    }
+  </style>
 </html>

@@ -205,6 +205,7 @@
         <div id="results-step" class="hide">
             <h2>Lesson Complete!</h2>
             <p id="final-score">You got 0 out of 5 correct!</p>
+            <button id="claim-points-btn" class="play-again-btn">Claim Points</button>
             <button id="play-again-btn" class="play-again-btn">Start Over</button>
         </div>
     </div>
@@ -378,6 +379,12 @@
         
         // Initial state
         startOver();
+
+    <!-- Points claim wiring -->
+    <script type="module">
+        // Use the correct relative path to points.js
+        import { awardPoints } from "../../../jsFiles/points.js";
+        window.score = 0; // Will be updated during the quiz
     </script>
 </body>
 </html>
