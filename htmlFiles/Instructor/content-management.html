@@ -30,7 +30,45 @@
         --primary-950: #052e16;
       }
     </style>
-  </head>
+  
+    <!-- Chatbot Integration -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="/js/instructor-header.js" defer></script>
+    <style>
+        /* Chatbot Styles */
+        #ecolearn-chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #20df6c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: none;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .material-icons {
+            font-size: 28px;
+        }
+    </style>
+    </head>
 
  <body class="bg-gray-50 text-gray-900" style="font-family: Lexend, 'Noto Sans', sans-serif">
     <div class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden">
@@ -605,7 +643,9 @@
         </main>
       </div>
     </div>
-  </body>
+          <!-- Chatbot Container -->
+        <div id="ecolearn-chatbot-container"></div>
+    </body>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
     import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.2.1/firebase-auth.js";

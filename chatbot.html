@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EcoLearn Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        .chat-container {
+            height: 70vh;
+            overflow-y: auto;
+        }
+        .user-message {
+            background-color: #e3f9e5;
+            border-radius: 1rem 1rem 0 1rem;
+        }
+        .bot-message {
+            background-color: #f0fdf4;
+            border-radius: 1rem 1rem 1rem 0;
+        }
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #4ade80;
+            margin: 0 2px;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes bounce {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="container mx-auto max-w-3xl p-4">
+        <header class="bg-green-600 text-white p-4 rounded-t-lg flex items-center">
+            <div class="w-10 h-10 mr-3">
+                <img src="./Images/gamification (2).png" alt="EcoLearn" class="w-full h-full object-contain">
+            </div>
+            <h1 class="text-xl font-bold">EcoLearn Assistant</h1>
+        </header>
+        
+        <div class="chat-container bg-white p-4 border-l border-r border-gray-200" id="chatContainer">
+            <div class="bot-message p-3 mb-4 max-w-[80%] w-max">
+                <p>Hello! I'm your EcoLearn assistant. How can I help you with environmental education today?</p>
+            </div>
+        </div>
+        
+        <div class="bg-white p-4 border border-t-0 border-gray-200 rounded-b-lg">
+            <div class="flex items-center">
+                <input 
+                    type="text" 
+                    id="userInput" 
+                    placeholder="Ask me about environmental topics..." 
+                    class="flex-1 p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+                    onkeypress="if(event.key === 'Enter') sendMessage()"
+                >
+                <button 
+                    onclick="sendMessage()" 
+                    class="bg-green-600 text-white p-3 rounded-r-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+                >
+                    <span class="material-icons">send</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const chatContainer = document.getElementById('chatContainer');
+        const userInput = document.getElementById('userInput');
+
+        function addMessage(message, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `p-3 mb-4 max-w-[80%] w-max ${isUser ? 'ml-auto bg-green-100 rounded-l-lg rounded-br-lg' : 'bg-gray-100 rounded-r-lg rounded-bl-lg'}`;
+            messageDiv.innerHTML = `<p>${message}</p>`;
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'typing-indicator p-3 mb-4 max-w-[80%] w-max bg-gray-100 rounded-r-lg rounded-bl-lg';
+            typingDiv.id = 'typingIndicator';
+            typingDiv.innerHTML = '<span></span><span></span><span></span>';
+            chatContainer.appendChild(typingDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // Add user message to chat
+            addMessage(message, true);
+            userInput.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                // Call your backend API here
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message }),
+                });
+
+                const data = await response.json();
+                hideTypingIndicator();
+                
+                if (data.response) {
+                    addMessage(data.response);
+                } else {
+                    addMessage("I'm sorry, I couldn't process your request. Please try again later.");
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                hideTypingIndicator();
+                addMessage("I'm having trouble connecting to the server. Please check your connection and try again.");
+            }
+        }
+
+        // Allow sending message with Enter key
+        userInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -27,7 +27,45 @@
       transform: translateX(1.25rem);
     }
   </style>
-</head>
+
+    <!-- Chatbot Integration -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="/js/shared.js" defer></script>
+    <style>
+        /* Chatbot Styles */
+        #ecolearn-chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #20df6c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: none;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .material-icons {
+            font-size: 28px;
+        }
+    </style>
+    </head>
 <body>
   <div class="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl z-10 p-2 hidden peer-checked:block">
     <a class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 rounded-md" href="./MyCourses/learn.html">
@@ -181,5 +219,7 @@
     </div>
   </main>
 </div>
-</body>
+        <!-- Chatbot Container -->
+        <div id="ecolearn-chatbot-container"></div>
+    </body>
 </html>

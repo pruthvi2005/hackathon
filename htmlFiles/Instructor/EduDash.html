@@ -15,6 +15,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script type="module" src="../../jsFiles/logout.js"></script>
+    <!-- Add Material Icons for chat interface -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Chatbot Script -->
+    <script src="/js/chatbot.js" defer></script>
     <style type="text/tailwindcss">
     :root {
       --primary-color: #20df6c;
@@ -26,9 +30,48 @@
       --border-color: #dce5df;
     }
   </style>
-  </head>
+  
+    <!-- Chatbot Integration -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="/js/instructor-header.js" defer></script>
+    <style>
+        /* Chatbot Styles */
+        #ecolearn-chatbot-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .chatbot-toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: #20df6c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: none;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .material-icons {
+            font-size: 28px;
+        }
+    </style>
+    </head>
 
-  <body class="bg-background-primary font-['Spline_Sans',_sans-serif] text-primary">
+  <body class="bg-background-primary font-['Spline_Sans',_sans-serif] text-primary relative">
+    <!-- Chatbot will be injected here by chatbot.js -->
     <div class="relative flex size-full min-h-screen flex-col bg-white group/design-root overflow-x-hidden" style='font-family: Lexend, "Noto Sans", sans-serif;'>
       <div class="layout-container flex h-full grow flex-col">
       <header
@@ -351,5 +394,7 @@
         }
       });
     </script>
-  </body>
+          <!-- Chatbot Container -->
+        <div id="ecolearn-chatbot-container"></div>
+    </body>
 </html>
